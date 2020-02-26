@@ -1,0 +1,18 @@
+.loginContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  background-color: blueviolet;
+}
+
+.login {
+  text-align: center;
+  background-color: rgb(255, 255, 255);
+  width: 300px;
+  max-width: 100vw;
+  height: 300px;
+  border-radius: 20px;
+  box-sizing: border-box;
+  padding: 20px;
+  margin: auto;
+}

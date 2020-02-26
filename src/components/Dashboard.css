@@ -1,0 +1,19 @@
+.dashboard {
+  display: flex;
+  background-color: azure;
+  height: 100vh;
+}
+.leftpane,
+.rightpane {
+  height: 100vh;
+  overflow: auto;
+}
+.leftpane {
+  background-color: blueviolet;
+  box-sizing: border-box;
+  padding: 10px;
+}
+.rightpane {
+  flex: 1;
+  background-color: chocolate;
+}
