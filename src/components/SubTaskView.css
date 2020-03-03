@@ -1,0 +1,5 @@
+.subTaskView {
+  flex-grow: 0;
+  transition-duration: 1s;
+  background-color: teal;
+}

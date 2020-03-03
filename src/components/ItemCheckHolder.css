@@ -1,0 +1,6 @@
+.itemCheckHolder {
+  display: flex;
+}
+.itemCheckHolder .text {
+  flex-grow: 1;
+}

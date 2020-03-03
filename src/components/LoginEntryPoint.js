@@ -4,9 +4,7 @@ import './LoginEntryPoint.css';
 import InputFeild from './InputField';
 
 export default class LoginEntryPoint extends Component {
-    constructor(props) {
-        super(props);
-    }
+
     onSubmit = (e) => {
         e.preventDefault();
         console.log(`Calling onSubmit in login form`);

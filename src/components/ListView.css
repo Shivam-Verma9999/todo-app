@@ -1,0 +1,5 @@
+.listView {
+  flex: 1;
+  transition-duration: 1s;
+  background-color: cadetblue;
+}
