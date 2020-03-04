@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import './ListView.css'
+import EditComponent from './EditComponent';
 
 export default class ListView extends Component {
 
@@ -14,6 +15,16 @@ export default class ListView extends Component {
 
     }
 
+    deleteClickHandler = (singleListName) => {
+        console.log('deleting ListName', singleListName)
+        this.props.onDeleteList(singleListName);
+    }
+
+    editClickHandler = (singleListName) => {
+        console.log('editing listName', singleListName);
+
+    }
+
     render() {
 
         console.log('list ', this.props.list);
@@ -24,11 +35,13 @@ export default class ListView extends Component {
                 <ul>
                     {
                         this.props.list.map((singleList) => {
-                            return <li
-                                key={singleList.listName}
-                                onClick={() => { this.props.onListSelect(singleList) }}
-                            >{singleList.listName}
-                            </li>
+                            return <div key={singleList.listName} >
+                                <span onClick={() => { this.props.onListSelect(singleList) }}>{singleList.listName}</span>
+                                <EditComponent
+                                    onEditClickHandler={() => this.editClickHandler(singleList.listName)}
+                                    onDeleteClickHandler={() => this.deleteClickHandler(singleList.listName)}
+                                />
+                            </div>
                         })
                     }
                 </ul>

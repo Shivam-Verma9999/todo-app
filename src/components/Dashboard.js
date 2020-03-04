@@ -89,6 +89,18 @@ export default class Dashboard extends Component {
         this.setState({ list: updatedList });
     }
 
+    deleteList = (singleListName) => {
+        let updatedListAfterDeletion = this.state.list.filter(singleList => singleList.listName !== singleListName);
+        console.log('dd', updatedListAfterDeletion);
+        this.setState((prevState, props) => {
+            return { list: updatedListAfterDeletion }
+        });
+        if (this.state.selectedList && this.state.selectedList.listName === singleListName) {
+            this.setState((prevState, props) => {
+                return { selectedList: null, selectedTask: null };
+            })
+        }
+    }
     updateTask = (taskList) => {
 
         let selectedListUpdated = this.state.selectedList.taskList.map(task => {
@@ -138,6 +150,7 @@ export default class Dashboard extends Component {
                 <ListView
                     list={this.state.list}
                     onListSelect={this.selectList}
+                    onDeleteList={this.deleteList}
                     onAddNewList={this.addNewList} />
                 <TaskView
                     selectedList={this.state.selectedList}

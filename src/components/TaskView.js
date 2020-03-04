@@ -22,7 +22,7 @@ export default class TaskView extends Component {
     }
 
     deleteTask = (taskToDelete) => {
-        let updatedTaskList = this.props.selectedList.taskList.filter(task => task.taskName != taskToDelete.taskName);
+        let updatedTaskList = this.props.selectedList.taskList.filter(task => task.taskName !== taskToDelete.taskName);
         console.log('updatedTaskList TaskView', updatedTaskList);
         let updatedList = this.props.selectedList;
         updatedList.taskList = updatedTaskList;
