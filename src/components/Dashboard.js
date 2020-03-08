@@ -43,6 +43,7 @@ export default class Dashboard extends Component {
                 this.setState((prevState, props) => {
                     return { list: fullList };
                 });
+                this.getSelectedList(this.state.selectedList);
             }).catch(er => {
                 console.log("profile load error", er);
             })
@@ -57,40 +58,45 @@ export default class Dashboard extends Component {
                 return { selectedList: selectedList, selectedTask: null, selectedSubTask: null };
             })
 
-            Axios.get(`http://localhost:3000/profile/${selectedList.id}`, config)
-                .then(data => {
-                    console.log('fetching selected list ', data.data);
-                    let taskList = [];
-                    data.data.tasks.forEach(task => {
-                        let newTask = {
-                            id: task.id,
-                            taskName: task.name,
-                            dueDate: task.dueDate,
-                            important: task.important,
-                            notes: task.notes,
-                            taskCompleted: task.completed,
-                            subTasks: []
-                        }
-                        taskList.push(newTask);
-                    });
-                    // let list = this.state.list;
-                    selectedList.taskList = taskList;
+            this.getSelectedList(selectedList);
 
-                    let newUpdatedList = this.state.list.map(singleList => {
-                        if (singleList.id === selectedList.id) {
-                            return selectedList;
-                        } else {
-                            return singleList;
-                        }
-                    });
-
-                    this.setState((prevState, props) => {
-                        return { list: newUpdatedList };
-                    })
-                }).catch(er => {
-                    console.log('error in fetching the selected list', er);
-                })
         }
+    }
+
+    getSelectedList = (selectedList) => {
+        Axios.get(`http://localhost:3000/profile/${selectedList.id}`, config)
+            .then(data => {
+                console.log('fetching selected list ', data.data);
+                let taskList = [];
+                data.data.tasks.forEach(task => {
+                    let newTask = {
+                        id: task.id,
+                        taskName: task.name,
+                        dueDate: task.dueDate,
+                        important: task.important,
+                        notes: task.notes,
+                        taskCompleted: task.completed,
+                        subTasks: []
+                    }
+                    taskList.push(newTask);
+                });
+
+                selectedList.taskList = taskList;
+
+                let newUpdatedList = this.state.list.map(singleList => {
+                    if (singleList.id === selectedList.id) {
+                        return selectedList;
+                    } else {
+                        return singleList;
+                    }
+                });
+
+                this.setState((prevState, props) => {
+                    return { list: newUpdatedList };
+                })
+            }).catch(er => {
+                console.log('error in fetching the selected list', er);
+            })
     }
 
     selectTask = (task) => {
@@ -175,15 +181,6 @@ export default class Dashboard extends Component {
     addNewTask = (newTaskName) => {
         console.log(newTaskName);
         if (newTaskName.length === 0) return;
-
-        /**
-         * id : taskId,
-					name : req.body.newTaskName,
-					completed : false,
-					important : false,
-					notes : "",
-					dueDate : ""
-         */
 
         Axios.post('http://localhost:3000/update/addTask', {
             listId: this.state.selectedList.id,
