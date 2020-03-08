@@ -191,32 +191,34 @@ export default class Dashboard extends Component {
         }, config)
             .then(response => {
                 console.log("after adding task in the list ", response);
+                let newTask = {
+                    taskName: newTaskName,
+                    id: response.data,
+                    taskCompleted: false,
+                    dueDate: null,
+                    notes: "",
+                    subTasks: []
+                }
+
+                let updatedTaskList = this.state.selectedList;
+                updatedTaskList.taskList.push(newTask);
+
+                this.setState((prevState) => {
+                    return { selectedList: updatedTaskList };
+                })
+                let updatedList = this.state.list.map(singleList => {
+                    if (singleList.listName === updatedTaskList.taskName) {
+                        return updatedTaskList;
+                    } else {
+                        return singleList;
+                    }
+                })
+
+                this.setState({ list: updatedList });
             }).catch(er => {
                 console.log("error in adding task in the list ", er);
             });
-        let newTask = {
-            taskName: newTaskName,
-            taskCompleted: false,
-            dueDate: null,
-            notes: "",
-            subTasks: []
-        }
 
-        let updatedTaskList = this.state.selectedList;
-        updatedTaskList.taskList.push(newTask);
-
-        this.setState((prevState) => {
-            return { selectedList: updatedTaskList };
-        })
-        let updatedList = this.state.list.map(singleList => {
-            if (singleList.listName === updatedTaskList.taskName) {
-                return updatedTaskList;
-            } else {
-                return singleList;
-            }
-        })
-
-        this.setState({ list: updatedList });
     }
 
     deleteList = (singleListName) => {
