@@ -5,23 +5,47 @@ import './App.css';
 
 
 export default class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      loggedIn: true
-    }
-  }
+    constructor() {
+        super();
+        this.state = {
+            loggedIn: false
+        }
 
-  doLogin = () => {
-    console.log("calling from App.js");
-    this.setState((prevState, props) => {
-      return { loggedIn: !prevState.loggedIn }
-    });
-    setTimeout(() => console.log('loggedIn', this.state.loggedIn), 1000);
-  }
-  render() {
-    return <>
-      {(this.state.loggedIn) ? <Dashboard /> : <LoginEntryPoint login={this.doLogin} />}
-    </>
-  }
+    }
+
+    doLogin = () => {
+        console.log("calling from App.js");
+        document.cookie = 'loggedIn=true';
+        this.setState((prevState, props) => {
+            return { loggedIn: true }
+        });
+    }
+    render() {
+        return <>
+            {(this.state.loggedIn) ? <Dashboard /> : <LoginEntryPoint login={this.doLogin} />}
+        </>
+    }
+
+
+    //checking last time loggedIn status if loggedIn is true then open dashboard
+    //else keep on login page
+    componentWillMount() {
+        const cok_obj = {};
+        if (document.cookie) {
+            let cok_ar = document.cookie.split(';');
+            cok_ar.forEach(cok => {
+                cok = cok.trim();
+                cok_obj[cok.split('=')[0]] = cok.split('=')[1];
+            });
+        }
+        console.log(cok_obj);
+
+        if (cok_obj['loggedIn']) {
+            this.setState((prevState, props) => {
+                return { loggedIn: cok_obj['loggedIn'] === 'true' };
+            })
+        }
+    }
+
+
 }

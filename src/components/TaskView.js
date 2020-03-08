@@ -6,6 +6,10 @@ import EditComponent from './EditComponent';
 
 export default class TaskView extends Component {
 
+    constructor(props) {
+        super(props);
+    }
+
     addTask = (e) => {
         e.preventDefault();
         let newTask = e.target.newTaskName.value.trim();
@@ -29,7 +33,7 @@ export default class TaskView extends Component {
         this.props.updateDeletedTaskList(updatedList);
     }
     render() {
-        console.log('rendering taskview');
+        console.log("rendering taskView with props", this.props);
         return <div className="taskView">
             {this.props.selectedList && this.props.selectedList.listName}
             {this.props.selectedList === null ?

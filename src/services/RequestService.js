@@ -1,27 +1,30 @@
 const axios = require('axios');
+const qs = require('querystring');
 
-axios.post('http://40.121.182.221:3000/auth/signin', {
-    username: 'sv805388@gmail.com',
-    password: 'abc'
-},
-    {
-        maxRedirects: 0,
-        withCredentials: true
-    })
-    .then(data => {
-        console.log(data);
-        console.log('ddddd');
-    }).catch(er => {
-        console.log(er);
-        console.log(er.response.headers['set-cookie'][0]);
-        console.log('errrrrr');
-        axios.get('http://40.121.182.221:3000/profile', {
-            headers: { cookie: er.response.headers['set-cookie'][0] }
-        }).then(res => {
-            console.log(res);
-        }).catch(er => {
-            console.log(er);
-            console.log('ddddd');
-        })
-    })
+let username = 'sv805388@gmail.com';
+let url = "http://40.121.182.221:3000/auth/signIn";
+// console.log(username);
+let password = 'abc';
 
+const config = {
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    withCredentials: true
+}
+
+let body = {
+    username: (username),
+    password: encodeURIComponent(password)
+};
+
+
+console.log(body.username);
+axios.post(url, qs.stringify(body), config)
+    .then((result) => {
+        console.log('then', result);
+    })
+    .catch((err) => {
+        // Do somthing
+        console.log('errr', err);
+    })

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './SubTaskView.css';
 import ItemCheckHolder from './ItemCheckHolder';
 import EditComponent from './EditComponent';
+import Axios from 'axios';
 export default class SubTaskView extends Component {
 
     toggleDoneStatus = (toggledSubtask) => {
@@ -34,7 +35,7 @@ export default class SubTaskView extends Component {
         updatedSubtasks.push(newSubTask);
         let updatedTask = this.props.selectedTask;
         updatedTask.subTasks = updatedSubtasks;
-        this.props.updateTask(updatedTask);
+        this.props.updateTask({ updatedTask, newSubTaskName: subTaskName });
 
     }
 

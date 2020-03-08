@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-
 import './ListView.css'
 import EditComponent from './EditComponent';
-
+import { config } from '../utility/requestConfig';
+import Axios from 'axios';
 export default class ListView extends Component {
+    constructor(props) {
+        super(props);
+    }
 
     createNewList = (e) => {
         e.preventDefault();
@@ -27,9 +30,9 @@ export default class ListView extends Component {
 
     render() {
 
-        console.log('list ', this.props.list);
+
         return <div className="listView">
-            {(this.props.list.length === 0) ?
+            {(!this.props.list || this.props.list.length === 0) ?
                 "New List will appear here"
                 :
                 <ul>
@@ -52,5 +55,7 @@ export default class ListView extends Component {
             </form>
         </div>
     }
+
+
 
 }
