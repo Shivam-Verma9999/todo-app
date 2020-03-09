@@ -54,7 +54,9 @@ export default class TaskView extends Component {
                 <ul>
                     <h2>TASK</h2>
                     <h3>{this.props.selectedList.listName}</h3>
-                    {
+                    {this.props.selectedList.taskList.length === 0 ?
+                        "New Task will appear here "
+                        :
                         this.props.selectedList.taskList.map(task => {
                             return <div className="content" key={task.id}>
                                 <ItemCheckHolder
@@ -67,7 +69,6 @@ export default class TaskView extends Component {
                                     onEditClickHandler={() => { this.editClickHandler(task) }}
                                     onDeleteClickHandler={() => this.deleteTask(task)}
                                 />
-                                {/* <div className="liner"></div> */}
                             </div>
                         })
                     }

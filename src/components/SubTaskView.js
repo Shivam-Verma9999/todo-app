@@ -75,7 +75,8 @@ export default class SubTaskView extends Component {
                 < ul >
                     <h2>STEPS</h2>
                     <h4>{this.props.selectedTask.taskName}</h4>
-                    {
+                    {this.props.selectedTask.subTasks.length === 0 ?
+                        "Add steps to your task" :
                         this.props.selectedTask.subTasks.map(subTask => {
                             return <div className="content" key={this.props.selectedTask.taskName + subTask.name}>
                                 <ItemCheckHolder

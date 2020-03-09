@@ -21,7 +21,7 @@ export default class ItemCheckHolder extends Component {
             <div className="checkBox">
                 {this.getCheckBox()}
             </div>
-            <div onClick={this.onClick} className="text pointer">
+            <div onClick={this.onClick} style={{ textDecoration: this.props.checked ? 'line-through' : '' }} className="text pointer">
                 {this.props.name}
             </div>
         </div >
