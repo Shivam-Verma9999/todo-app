@@ -218,19 +218,28 @@ export default class Dashboard extends Component {
 
     }
 
-    deleteList = (singleListName) => {
-        let updatedListAfterDeletion = this.state.list.filter(singleList => singleList.listName !== singleListName);
+    deleteList = (singleListToDelete) => {
+        let updatedListAfterDeletion = this.state.list.filter(singleList => singleList.id !== singleListToDelete.id);
         console.log('dd', updatedListAfterDeletion);
         this.setState((prevState, props) => {
             return { list: updatedListAfterDeletion }
         });
-        if (this.state.selectedList && this.state.selectedList.listName === singleListName) {
+        if (this.state.selectedList && this.state.selectedList.id === singleListToDelete.id) {
             this.setState((prevState, props) => {
                 return { selectedList: null, selectedTask: null };
             })
         }
+
+        Axios.post('http://localhost:3000/delete/deleteList', {
+            listId: singleListToDelete.id
+        }, config).then(response => {
+            console.log('after deleting list', response);
+        }).catch(er => {
+            console.log("error in deleting list", er);
+        })
     }
-    updateTask = ({ updatedTask, newSubTaskName }) => {
+    // adding new taskName in the list 
+    updateTask = ({ updatedTask, newSubTaskName, toggled }) => {
 
         let selectedListUpdated = this.state.selectedList.taskList.map(task => {
             if (task.id === updatedTask.id) {
@@ -247,22 +256,44 @@ export default class Dashboard extends Component {
             }
         });
         this.setState({ list: updatedList });
-        Axios.post('http://localhost:3000/update/addSubtask', {
-            listId: this.state.selectedList.id,
-            taskId: this.state.selectedTask.id,
-            newSubTaskName
-        }, config).then(response => {
-            console.log("after addding subtask ", response);
-        }).catch(er => {
-            console.log('error in adding subtask', er);
-        })
+
+        if (toggled === false) {
+            Axios.post('http://localhost:3000/update/addSubtask', {
+                listId: this.state.selectedList.id,
+                taskId: this.state.selectedTask.id,
+                subtaskName: newSubTaskName
+            }, config).then(response => {
+                console.log("after addding subtask ", response);
+            }).catch(er => {
+                console.log('error in adding subtask', er);
+            })
+        } else if (toggled === true) {
+            console.log("data for toggling task", updatedTask);
+            Axios.post('http://localhost:3000/update/updateTask', {
+                listId: this.state.selectedList.id,
+                taskId: updatedTask.id,
+                taskName: updatedTask.taskName,
+                taskCompletedStatus: updatedTask.taskCompleted,
+                taskImportantStatus: updatedTask.important,
+                taskNotes: updatedTask.notes,
+                taskDueDate: updatedTask.dueDate
+            }, config)
+                .then(response => {
+                    console.log('after updating toggle status', response);
+                })
+                .catch(er => {
+                    console.log('error in updating toggle status of task ', er);
+                });
+        }
     }
 
-    updateDeletedTaskList = (updateListAfterDeletion) => {
-        console.log('updateListAfterDeletion', updateListAfterDeletion);
+
+    //updating deleted task in the state and making delete request to server
+    updateDeletedTaskList = ({ updatedListAfterDeletion, taskToDelete }) => {
+        console.log('updateListAfterDeletion', updatedListAfterDeletion);
         let updatedList = this.state.list.map(taskList => {
-            if (taskList.listName === updateListAfterDeletion) {
-                return updateListAfterDeletion;
+            if (taskList.id === updatedListAfterDeletion.id) {
+                return updatedListAfterDeletion;
             } else {
                 return taskList;
             }
@@ -271,14 +302,48 @@ export default class Dashboard extends Component {
             return {
                 list: updatedList
             }
+        });
+        if (taskToDelete)
+            Axios.post('http://localhost:3000/delete/deleteTask', {
+                listId: this.state.selectedList.id,
+                taskId: taskToDelete.id
+            }, config).then(response => {
+                console.log('deleted task response ', response);
+            }).catch(er => {
+                console.log('error in deleting task', er);
+            })
+    }
+    //deleting subtask from the state and making delete request for that subtask to the server
+    updateDeletedSubtask = ({ deleteUpdatedSubtasks, subtasktoDelete }) => {
+        Axios.post('http://localhost:3000/delete/deleteSubtask', {
+            listId: this.state.selectedList.id,
+            taskId: this.state.selectedTask.id,
+            subtaskName: subtasktoDelete.name
+        }, config).then(response => {
+            console.log('after deleting subtask', response);
+            let updatedSelectedTask = this.state.selectedTask;
+            console.log('dash', updatedSelectedTask);
+            updatedSelectedTask.subTasks = deleteUpdatedSubtasks;
+            console.log(updatedSelectedTask.taskName);
+            this.updateDeletedTaskList({ updatedListAfterDeletion: updatedSelectedTask });
+        }).catch(er => {
+            console.log('error in deleting subtask', er);
         })
     }
-    updateDeletedSubtask = (deleteUpdatedSubtaskList) => {
-        let updatedSelectedTask = this.state.selectedTask;
-        console.log('dash', updatedSelectedTask);
-        updatedSelectedTask.subTasks = deleteUpdatedSubtaskList;
-        console.log(updatedSelectedTask.taskName);
-        this.updateDeletedTaskList(updatedSelectedTask);
+    saveSubtask = (oldSubtask, newSubtaskName) => {
+        console.log(oldSubtask, newSubtaskName);
+        Axios.post('http://localhost:3000/update/updateSubtask', {
+            listId: this.state.selectedList.id,
+            taskId: this.state.selectedTask.id,
+            subtaskName: oldSubtask.name,
+            newSubtaskName: newSubtaskName,
+            subtaskCompletedStatus: oldSubtask.doneStatus
+        }, config)
+            .then(response => {
+                console.log('updated Subtask', response);
+            }).catch(er => {
+                console.log('error in updating subtask', er);
+            })
     }
 
     render() {
@@ -300,6 +365,7 @@ export default class Dashboard extends Component {
                     selectedTask={this.state.selectedTask}
                     onClick={this.selectedSubTask}
                     updateTask={this.updateTask}
+                    onSaveSubtask={this.saveSubtask}
                     updateDeletedSubtask={this.updateDeletedSubtask}
                 />
             </div>

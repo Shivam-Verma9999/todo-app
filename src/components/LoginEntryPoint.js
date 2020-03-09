@@ -22,7 +22,8 @@ export default class LoginEntryPoint extends Component {
             password: encodeURIComponent(password)
         };
 
-
+        alert(body.username);
+        alert(body.password);
         console.log(body.username);
         axios.post(url, body, config)
             .then((result) => {
@@ -36,6 +37,7 @@ export default class LoginEntryPoint extends Component {
             .catch((err) => {
                 // Do somthing
                 console.log('errr', err);
+                alert(JSON.stringify(err));
             })
 
     }

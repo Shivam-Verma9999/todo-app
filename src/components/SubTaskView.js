@@ -10,6 +10,7 @@ export default class SubTaskView extends Component {
         toggledSubtask.doneStatus = !toggledSubtask.doneStatus;
         let updatedSubtasks = this.props.selectedTask.subTasks.map((subtask) => {
             if (subtask.name === toggledSubtask.name) {
+                this.props.onSaveSubtask(toggledSubtask, toggledSubtask.name);
                 return toggledSubtask;
             } else {
                 return subtask;
@@ -18,7 +19,8 @@ export default class SubTaskView extends Component {
 
         let updatedTask = this.props.selectedTask;
         updatedTask.subTasks = updatedSubtasks;
-        this.props.updateTask(updatedTask);
+        //{ updatedTask, newSubTaskName, toggled }
+        this.props.updateTask({ updatedTask, newSubTaskName: toggledSubtask.name, toggled: true });
     }
 
     addNewSubTask = (e) => {
@@ -35,13 +37,13 @@ export default class SubTaskView extends Component {
         updatedSubtasks.push(newSubTask);
         let updatedTask = this.props.selectedTask;
         updatedTask.subTasks = updatedSubtasks;
-        this.props.updateTask({ updatedTask, newSubTaskName: subTaskName });
+        this.props.updateTask({ updatedTask, newSubTaskName: subTaskName, toggled: false });
 
     }
 
     onDeleteClickHandler = (deltedSubtask) => {
         let deleteUpdatedSubtasks = this.props.selectedTask.subTasks.filter(subtask => subtask.name !== deltedSubtask.name);
-        this.props.updateDeletedSubtask(deleteUpdatedSubtasks);
+        this.props.updateDeletedSubtask({ deleteUpdatedSubtasks, subtasktoDelete: deltedSubtask });
     }
     render() {
 
@@ -61,7 +63,6 @@ export default class SubTaskView extends Component {
                                 <EditComponent
                                     // TODO: enable subtask editing functionality
                                     onEditClickHandler={() => console.log('editing subtask')}
-                                    // TODO: enable subtask deleting functionality
                                     onDeleteClickHandler={() => this.onDeleteClickHandler(subTask)}
                                 />
                             </div>
@@ -69,10 +70,10 @@ export default class SubTaskView extends Component {
                     }
                 </ul>
             }
-            <form onSubmit={this.addNewSubTask}>
+            {this.props.selectedTask && <form onSubmit={this.addNewSubTask}>
                 <input type='text' name="newSubTaskName" />
                 <button type="submit">AddSubTask</button>
-            </form>
+            </form>}
         </div>
     }
 

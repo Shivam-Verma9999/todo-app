@@ -22,15 +22,16 @@ export default class TaskView extends Component {
 
     toggleDoneStatus = (task) => {
         task.taskCompleted = !task.taskCompleted;
-        this.props.updateTask(task);
+        //{ updatedTask, newSubTaskName, toggled }
+        this.props.updateTask({ updatedTask: task, toggled: true });
     }
 
     deleteTask = (taskToDelete) => {
-        let updatedTaskList = this.props.selectedList.taskList.filter(task => task.taskName !== taskToDelete.taskName);
+        let updatedTaskList = this.props.selectedList.taskList.filter(task => task.id !== taskToDelete.id);
         console.log('updatedTaskList TaskView', updatedTaskList);
-        let updatedList = this.props.selectedList;
-        updatedList.taskList = updatedTaskList;
-        this.props.updateDeletedTaskList(updatedList);
+        let updatedListAfterDeletion = this.props.selectedList;
+        updatedListAfterDeletion.taskList = updatedTaskList;
+        this.props.updateDeletedTaskList({ updatedListAfterDeletion, taskToDelete });
     }
     render() {
         console.log("rendering taskView with props", this.props);

@@ -41,8 +41,8 @@ export default class ListView extends Component {
                             return <div key={singleList.listName} >
                                 <span onClick={() => { this.props.onListSelect(singleList) }}>{singleList.listName}</span>
                                 <EditComponent
-                                    onEditClickHandler={() => this.editClickHandler(singleList.listName)}
-                                    onDeleteClickHandler={() => this.deleteClickHandler(singleList.listName)}
+                                    onEditClickHandler={() => this.editClickHandler(singleList)}
+                                    onDeleteClickHandler={() => this.deleteClickHandler(singleList)}
                                 />
                             </div>
                         })
