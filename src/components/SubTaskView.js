@@ -29,6 +29,19 @@ export default class SubTaskView extends Component {
         e.target.newSubTaskName.value = '';
         if (subTaskName.length === 0) return;
 
+        let alreadyExists = false;
+        let listOfSubtasks = this.props.selectedTask.subTasks;
+        for (let i = 0; i < listOfSubtasks.length; i++) {
+            if (listOfSubtasks[i].name === subTaskName) {
+                alreadyExists = true;
+                break;
+            }
+        }
+        if (alreadyExists) {
+            alert(`"${subTaskName}" already exists.`);
+            return;
+        }
+        // TODO: can show anything meaninhg full 
         let newSubTask = {
             name: subTaskName,
             doneStatus: false
@@ -41,9 +54,11 @@ export default class SubTaskView extends Component {
 
     }
 
-    onDeleteClickHandler = (deltedSubtask) => {
-        let deleteUpdatedSubtasks = this.props.selectedTask.subTasks.filter(subtask => subtask.name !== deltedSubtask.name);
-        this.props.updateDeletedSubtask({ deleteUpdatedSubtasks, subtasktoDelete: deltedSubtask });
+    onDeleteClickHandler = (deletedSubtask) => {
+        if (!window.confirm(`Delete step "${deletedSubtask.name}"?`)) return;
+
+        let deleteUpdatedSubtasks = this.props.selectedTask.subTasks.filter(subtask => subtask.name !== deletedSubtask.name);
+        this.props.updateDeletedSubtask({ deleteUpdatedSubtasks, subtasktoDelete: deletedSubtask });
     }
 
     editClickHandler = (subtask) => {
@@ -56,12 +71,13 @@ export default class SubTaskView extends Component {
     }
     render() {
         return <div style={{ flexGrow: (this.props.selectedTask) ? '1' : '0' }} className="subTaskView">
-            {this.props.selectedTask && this.props.selectedTask.taskName}
             {this.props.selectedTask != null &&
                 < ul >
+                    <h2>STEPS</h2>
+                    <h4>{this.props.selectedTask.taskName}</h4>
                     {
                         this.props.selectedTask.subTasks.map(subTask => {
-                            return <div key={this.props.selectedTask.taskName + subTask.name}>
+                            return <div className="content" key={this.props.selectedTask.taskName + subTask.name}>
                                 <ItemCheckHolder
                                     toggleDoneStatus={() => this.toggleDoneStatus(subTask)}
                                     onClickHandler={() => { console.log('clicking subtask') }}
@@ -69,19 +85,19 @@ export default class SubTaskView extends Component {
                                     name={subTask.name}
                                 />
                                 <EditComponent
-                                    // TODO: enable subtask editing functionality
                                     onEditClickHandler={() => { this.editClickHandler(subTask) }}
                                     onDeleteClickHandler={() => this.onDeleteClickHandler(subTask)}
                                 />
                             </div>
                         })
                     }
+                    <form onSubmit={this.addNewSubTask}>
+                        <input type='text' name="newSubTaskName" />
+                        <button type="submit">Add step</button>
+                    </form>
                 </ul>
             }
-            {this.props.selectedTask && <form onSubmit={this.addNewSubTask}>
-                <input type='text' name="newSubTaskName" />
-                <button type="submit">AddSubTask</button>
-            </form>}
+
         </div>
     }
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './LoginEntryPoint.css';
 import InputFeild from './InputField';
-import { config } from '../utility/requestConfig';
+import { config, API_URL } from '../utility/Config';
 export default class LoginEntryPoint extends Component {
 
     onSubmit = (e) => {
@@ -10,7 +10,7 @@ export default class LoginEntryPoint extends Component {
         console.log(`Calling onSubmit in login form`);
         // console.log(e.target);
         let username = e.target.username.value.trim();
-        let url = "http://localhost:3000/auth/signIn";
+        let url = `${API_URL}/auth/signIn`;
         // console.log(username);
         let password = e.target.password.value.trim();
 

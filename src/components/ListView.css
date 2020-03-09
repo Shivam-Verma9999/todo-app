@@ -1,5 +1,7 @@
 .listView {
-  flex: 1;
+  flex-grow: 1;
   transition-duration: 1s;
-  background-color: cadetblue;
+  /* background-color: cadetblue; */
+  max-height: 100vh;
+  overflow: auto;
 }

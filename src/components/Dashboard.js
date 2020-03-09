@@ -6,7 +6,7 @@ import TaskView from './TaskView';
 import SubTaskView from './SubTaskView';
 
 import Axios from 'axios';
-import { config } from '../utility/requestConfig';
+import { config, API_URL } from '../utility/Config';
 
 export default class Dashboard extends Component {
     constructor(props) {
@@ -27,9 +27,10 @@ export default class Dashboard extends Component {
         }
     }
     fetchProfile = () => {
-        Axios.get('http://localhost:3000/profile', config)
+        Axios.get(`${API_URL}/profile`, config)
             .then(data => {
                 // console.log('profile load', data.data);
+                let count = 0;
                 let fullList = data.data.lists.map(list => {
                     let listObj = {
                         listName: list.name,
@@ -37,6 +38,12 @@ export default class Dashboard extends Component {
                         isCurrent: list.isCurrent,
                         taskList: []
                     };
+                    if (count === 0) {
+                        this.setState((prevState, props) => {
+                            return { selectedList: listObj };
+                        });
+                        count++;
+                    }
                     if (list.isCurrent) {
                         this.setState((prevState, props) => {
                             return { selectedList: listObj };
@@ -71,7 +78,7 @@ export default class Dashboard extends Component {
 
     // request selected list data from server 
     getSelectedList = (selectedList) => {
-        Axios.get(`http://localhost:3000/profile/${selectedList.id}`, config)
+        Axios.get(`${API_URL}/profile/${selectedList.id}`, config)
             .then(data => {
                 //console.log('fetching selected list ', data.data);
                 let taskList = [];
@@ -117,7 +124,7 @@ export default class Dashboard extends Component {
             })
         }
 
-        Axios.get(`http://localhost:3000/profile/${this.state.selectedList.id}/${task.id}`, config)
+        Axios.get(`${API_URL}/profile/${this.state.selectedList.id}/${task.id}`, config)
             .then(response => {
                 //console.log('response ', response.data.subtasks);
                 let newSubtasks = [];
@@ -168,7 +175,7 @@ export default class Dashboard extends Component {
     addNewList = (newListName) => {
         if (newListName.length === 0)
             return;
-        Axios.post('http://localhost:3000/update/addList', { newListName }, config)
+        Axios.post(`${API_URL}/update/addList`, { newListName }, config)
             .then(data => {
                 //console.log('then addnewList ', data);
                 let newList = {
@@ -192,7 +199,7 @@ export default class Dashboard extends Component {
         //console.log(newTaskName);
         if (newTaskName.length === 0) return;
 
-        Axios.post('http://localhost:3000/update/addTask', {
+        Axios.post(`${API_URL}/update/addTask`, {
             listId: this.state.selectedList.id,
             newTaskName: newTaskName
         }, config)
@@ -241,7 +248,7 @@ export default class Dashboard extends Component {
             })
         }
 
-        Axios.post('http://localhost:3000/delete/deleteList', {
+        Axios.post(`${API_URL}/delete/deleteList`, {
             listId: singleListToDelete.id
         }, config).then(response => {
             //console.log('after deleting list', response);
@@ -270,7 +277,7 @@ export default class Dashboard extends Component {
         this.setState({ list: updatedList });
 
         if (toggled === false) {
-            Axios.post('http://localhost:3000/update/addSubtask', {
+            Axios.post(`${API_URL}/update/addSubtask`, {
                 listId: this.state.selectedList.id,
                 taskId: this.state.selectedTask.id,
                 subtaskName: newSubTaskName
@@ -282,7 +289,7 @@ export default class Dashboard extends Component {
             })
         } else if (toggled === true) {
             //console.log("data for toggling task", updatedTask);
-            Axios.post('http://localhost:3000/update/updateTask', {
+            Axios.post(`${API_URL}/update/updateTask`, {
                 listId: this.state.selectedList.id,
                 taskId: updatedTask.id,
                 taskName: updatedTask.taskName,
@@ -324,7 +331,7 @@ export default class Dashboard extends Component {
                     return { selectedTask: null }
                 });
             };
-            Axios.post('http://localhost:3000/delete/deleteTask', {
+            Axios.post(`${API_URL}/delete/deleteTask`, {
                 listId: this.state.selectedList.id,
                 taskId: taskToDelete.id
             }, config).then(response => {
@@ -339,7 +346,7 @@ export default class Dashboard extends Component {
     }
     //deleting subtask from the state and making delete request for that subtask to the server
     updateDeletedSubtask = ({ deleteUpdatedSubtasks, subtasktoDelete }) => {
-        Axios.post('http://localhost:3000/delete/deleteSubtask', {
+        Axios.post(`${API_URL}/delete/deleteSubtask`, {
             listId: this.state.selectedList.id,
             taskId: this.state.selectedTask.id,
             subtaskName: subtasktoDelete.name
@@ -357,7 +364,7 @@ export default class Dashboard extends Component {
     }
     saveSubtask = (oldSubtask, newSubtaskName) => {
         //console.log("to network request ", oldSubtask, newSubtaskName);
-        Axios.post('http://localhost:3000/update/updateSubtask', {
+        Axios.post(`${API_URL}/update/updateSubtask`, {
             listId: this.state.selectedList.id,
             taskId: this.state.selectedTask.id,
             subtaskName: oldSubtask.name,
@@ -372,8 +379,8 @@ export default class Dashboard extends Component {
             })
     }
 
-    ListName = ({ oldSingleList, newListName }) => {
-        Axios.post('http://localhost:3000/update/updateList', {
+    editListName = ({ oldSingleList, newListName }) => {
+        Axios.post(`${API_URL}/update/updateList`, {
             listId: oldSingleList.id,
             newListName: newListName
         }, config).then(response => {
@@ -398,7 +405,7 @@ export default class Dashboard extends Component {
     editTaskName = ({ oldTask, newTaskName }) => {
         // requirements -> for searching => listId, taskId 
         //				   new data => taskName, taskCompletedStatus, taskImportantStatus, taskNotes, taskDueDate
-        Axios.post('http://localhost:3000/update/updateTask', {
+        Axios.post(`${API_URL}/update/updateTask`, {
             listId: this.state.selectedList.id,
             taskId: oldTask.id,
             taskName: newTaskName,
@@ -444,14 +451,6 @@ export default class Dashboard extends Component {
     }
     render() {
         return <>
-
-            <div className="modal" style={{ translate: this.state.editMode ? '-50% 200%' : '-50% -100%' }}>
-                <div className="mid-modal">
-                    <input type="text" name="newName" placeholder="Enter newName" />
-                    <button>Cancel</button>
-                    <button>Save</button>
-                </div>
-            </div>
             <div className="dashboard">
                 <ListView
                     list={this.state.list}

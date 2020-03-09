@@ -26,6 +26,8 @@ export default class TaskView extends Component {
     }
 
     deleteTask = (taskToDelete) => {
+        if (!window.confirm(`Delete task "${taskToDelete.taskName}"?`)) return;
+
         let updatedTaskList = this.props.selectedList.taskList.filter(task => task.id !== taskToDelete.id);
         //console.log('updatedTaskList TaskView', updatedTaskList);
         let updatedListAfterDeletion = this.props.selectedList;
@@ -46,14 +48,15 @@ export default class TaskView extends Component {
     render() {
         //console.log("rendering taskView with props", this.props);
         return <div className="taskView">
-            {this.props.selectedList && this.props.selectedList.listName}
             {this.props.selectedList === null ?
                 "Please select list to View"
                 :
                 <ul>
+                    <h2>TASK</h2>
+                    <h3>{this.props.selectedList.listName}</h3>
                     {
                         this.props.selectedList.taskList.map(task => {
-                            return <div key={this.props.selectedList.listName + task.taskName}>
+                            return <div className="content" key={task.id}>
                                 <ItemCheckHolder
                                     name={task.taskName}
                                     onClickHandler={() => this.props.selectTask(task)}
@@ -64,15 +67,17 @@ export default class TaskView extends Component {
                                     onEditClickHandler={() => { this.editClickHandler(task) }}
                                     onDeleteClickHandler={() => this.deleteTask(task)}
                                 />
+                                {/* <div className="liner"></div> */}
                             </div>
                         })
                     }
+                    <form onSubmit={this.addTask}>
+                        <input type='text' name="newTaskName" />
+                        <button type="submit" >New Task</button>
+                    </form>
                 </ul>
             }
-            <form onSubmit={this.addTask}>
-                <input type='text' name="newTaskName" />
-                <button type="submit" >AddNewList</button>
-            </form>
+
         </div>
     }
 }

@@ -1,5 +1,5 @@
 .taskView {
-  flex: 1;
+  flex-grow: 1;
   transition-duration: 1s;
   background-color: rgb(95, 107, 160);
 }

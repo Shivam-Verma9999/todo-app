@@ -4,4 +4,5 @@ const config = {
     // },
     withCredentials: true
 }
-export { config };
+const API_URL = 'http://localhost:3000'
+export { config, API_URL };

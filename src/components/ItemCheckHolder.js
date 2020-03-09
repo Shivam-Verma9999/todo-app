@@ -21,7 +21,7 @@ export default class ItemCheckHolder extends Component {
             <div className="checkBox">
                 {this.getCheckBox()}
             </div>
-            <div onClick={this.onClick} className="text">
+            <div onClick={this.onClick} className="text pointer">
                 {this.props.name}
             </div>
         </div >

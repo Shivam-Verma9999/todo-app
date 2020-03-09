@@ -1,12 +1,35 @@
 .App {
   text-align: center;
 }
+body {
+  font-family: Roboto;
+}
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
 
+.content {
+  background-color: white;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 2px 0px #c8cdd4;
+  max-width: 90%;
+}
+
+.pointer {
+  cursor: pointer;
+  background-color: transparent;
+  transition-duration: 0.3s;
+}
+h2 {
+  margin-left: -15px;
+}
+.pointer:hover {
+  background-color: #dbdbdb;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
