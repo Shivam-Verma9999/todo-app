@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import './SubTaskView.css';
 import ItemCheckHolder from './ItemCheckHolder';
 import EditComponent from './EditComponent';
-import Axios from 'axios';
 export default class SubTaskView extends Component {
 
     toggleDoneStatus = (toggledSubtask) => {
@@ -15,6 +14,7 @@ export default class SubTaskView extends Component {
             } else {
                 return subtask;
             }
+
         });
 
         let updatedTask = this.props.selectedTask;
@@ -45,8 +45,16 @@ export default class SubTaskView extends Component {
         let deleteUpdatedSubtasks = this.props.selectedTask.subTasks.filter(subtask => subtask.name !== deltedSubtask.name);
         this.props.updateDeletedSubtask({ deleteUpdatedSubtasks, subtasktoDelete: deltedSubtask });
     }
-    render() {
 
+    editClickHandler = (subtask) => {
+        let newSubtaskName = prompt('Enter new Subtask Name', subtask.name);
+        if (newSubtaskName === null) return;
+        newSubtaskName = newSubtaskName.trim();
+        if (newSubtaskName !== subtask.name) {
+            this.props.editSubtaskName(subtask, newSubtaskName)
+        }
+    }
+    render() {
         return <div style={{ flexGrow: (this.props.selectedTask) ? '1' : '0' }} className="subTaskView">
             {this.props.selectedTask && this.props.selectedTask.taskName}
             {this.props.selectedTask != null &&
@@ -62,7 +70,7 @@ export default class SubTaskView extends Component {
                                 />
                                 <EditComponent
                                     // TODO: enable subtask editing functionality
-                                    onEditClickHandler={() => console.log('editing subtask')}
+                                    onEditClickHandler={() => { this.editClickHandler(subTask) }}
                                     onDeleteClickHandler={() => this.onDeleteClickHandler(subTask)}
                                 />
                             </div>

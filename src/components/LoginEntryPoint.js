@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './LoginEntryPoint.css';
 import InputFeild from './InputField';
-import qs from 'querystring';
 import { config } from '../utility/requestConfig';
 export default class LoginEntryPoint extends Component {
 
@@ -22,8 +21,7 @@ export default class LoginEntryPoint extends Component {
             password: encodeURIComponent(password)
         };
 
-        alert(body.username);
-        alert(body.password);
+
         console.log(body.username);
         axios.post(url, body, config)
             .then((result) => {
@@ -36,8 +34,8 @@ export default class LoginEntryPoint extends Component {
             })
             .catch((err) => {
                 // Do somthing
-                console.log('errr', err);
-                alert(JSON.stringify(err));
+                // console.log('errr', err);
+                // alert(err);
             })
 
     }

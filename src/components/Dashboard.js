@@ -5,7 +5,6 @@ import ListView from './ListView';
 import TaskView from './TaskView';
 import SubTaskView from './SubTaskView';
 
-import list from '../utility/fakeData';
 import Axios from 'axios';
 import { config } from '../utility/requestConfig';
 
@@ -21,10 +20,16 @@ export default class Dashboard extends Component {
         this.fetchProfile();
     }
 
+    moveToLoginIfUnauthorized = (er) => {
+        if (er.response.status === 401) {
+            document.cookie = 'loggedIn=false';
+            window.location.reload();
+        }
+    }
     fetchProfile = () => {
         Axios.get('http://localhost:3000/profile', config)
             .then(data => {
-                console.log('profile load', data.data);
+                // console.log('profile load', data.data);
                 let fullList = data.data.lists.map(list => {
                     let listObj = {
                         listName: list.name,
@@ -39,17 +44,18 @@ export default class Dashboard extends Component {
                     }
                     return listObj;
                 });
-                console.log(fullList);
+                // console.log(fullList);
                 this.setState((prevState, props) => {
                     return { list: fullList };
                 });
                 this.getSelectedList(this.state.selectedList);
             }).catch(er => {
-                console.log("profile load error", er);
+                //console.log("profile load error", er);
+                this.moveToLoginIfUnauthorized(er);
             })
     }
     selectList = (selectedList) => {
-        console.log('Selecting List', selectedList);
+        //console.log('Selecting List', selectedList);
         // if selected already then unselect it
         if (this.state.selectedList && this.state.selectedList.id === selectedList.id) {
 
@@ -63,10 +69,11 @@ export default class Dashboard extends Component {
         }
     }
 
+    // request selected list data from server 
     getSelectedList = (selectedList) => {
         Axios.get(`http://localhost:3000/profile/${selectedList.id}`, config)
             .then(data => {
-                console.log('fetching selected list ', data.data);
+                //console.log('fetching selected list ', data.data);
                 let taskList = [];
                 data.data.tasks.forEach(task => {
                     let newTask = {
@@ -95,12 +102,13 @@ export default class Dashboard extends Component {
                     return { list: newUpdatedList };
                 })
             }).catch(er => {
-                console.log('error in fetching the selected list', er);
+                //console.log('error in fetching the selected list', er);
+                this.moveToLoginIfUnauthorized(er);
             })
     }
 
     selectTask = (task) => {
-        console.log('Selecting Task', task.taskName);
+        //console.log('Selecting Task', task.taskName);
 
         if (this.state.selectedTask && this.state.selectedTask.id === task.id) {
         } else {
@@ -111,17 +119,17 @@ export default class Dashboard extends Component {
 
         Axios.get(`http://localhost:3000/profile/${this.state.selectedList.id}/${task.id}`, config)
             .then(response => {
-                console.log('response ', response.data.subtasks);
+                //console.log('response ', response.data.subtasks);
                 let newSubtasks = [];
                 response.data.subtasks.forEach(subtask => {
                     newSubtasks.push({ name: subtask.name, doneStatus: subtask.completed });
                 });
                 let newTask = this.state.selectedTask;
                 newTask.subTasks = newSubtasks;
-                console.log("new Subtasks", newSubtasks);
-                console.log("new Task", newTask);
+                //console.log("new Subtasks", newSubtasks);
+                //console.log("new Task", newTask);
 
-                console.log('old selectedList ', this.state.selectedList);
+                //console.log('old selectedList ', this.state.selectedList);
                 let newSelectedList = this.state.selectedList;
                 newSelectedList.taskList = newSelectedList.taskList.map(task => {
                     if (task.id === newTask.id) {
@@ -131,7 +139,7 @@ export default class Dashboard extends Component {
                     }
                 })
 
-                console.log("new Selected List ", newSelectedList);
+                //console.log("new Selected List ", newSelectedList);
 
                 let newList = this.state.list.map(singleList => {
                     if (singleList.id === newSelectedList.id) {
@@ -140,20 +148,21 @@ export default class Dashboard extends Component {
                         return singleList;
                     }
                 });
-                console.log("new List ", newList);
+                //console.log("new List ", newList);
                 this.setState((prevState, props) => {
                     return { list: newList, selectedList: newSelectedList, selectedTask: newTask };
                 })
 
             }).catch(er => {
-                console.log('error fetching task', er);
+                //console.log('error fetching task', er);
+                this.moveToLoginIfUnauthorized(er);
             })
 
 
     }
 
     selectSubTask = (taskName) => {
-        console.log('Selecting SubTask');
+        //console.log('Selecting SubTask');
     }
 
     addNewList = (newListName) => {
@@ -161,7 +170,7 @@ export default class Dashboard extends Component {
             return;
         Axios.post('http://localhost:3000/update/addList', { newListName }, config)
             .then(data => {
-                console.log('then addnewList ', data);
+                //console.log('then addnewList ', data);
                 let newList = {
                     listName: newListName,
                     id: data.data,
@@ -173,13 +182,14 @@ export default class Dashboard extends Component {
                     return { list: this.state.list }
                 });
             }).catch(er => {
-                console.log('catch addNewList', er);
+                //console.log('catch addNewList', er);
+                this.moveToLoginIfUnauthorized(er);
             })
 
     }
 
     addNewTask = (newTaskName) => {
-        console.log(newTaskName);
+        //console.log(newTaskName);
         if (newTaskName.length === 0) return;
 
         Axios.post('http://localhost:3000/update/addTask', {
@@ -187,7 +197,7 @@ export default class Dashboard extends Component {
             newTaskName: newTaskName
         }, config)
             .then(response => {
-                console.log("after adding task in the list ", response);
+                //console.log("after adding task in the list ", response);
                 let newTask = {
                     taskName: newTaskName,
                     id: response.data,
@@ -213,14 +223,15 @@ export default class Dashboard extends Component {
 
                 this.setState({ list: updatedList });
             }).catch(er => {
-                console.log("error in adding task in the list ", er);
+                //console.log("error in adding task in the list ", er);
+                this.moveToLoginIfUnauthorized(er);
             });
 
     }
 
     deleteList = (singleListToDelete) => {
         let updatedListAfterDeletion = this.state.list.filter(singleList => singleList.id !== singleListToDelete.id);
-        console.log('dd', updatedListAfterDeletion);
+        //console.log('dd', updatedListAfterDeletion);
         this.setState((prevState, props) => {
             return { list: updatedListAfterDeletion }
         });
@@ -233,9 +244,10 @@ export default class Dashboard extends Component {
         Axios.post('http://localhost:3000/delete/deleteList', {
             listId: singleListToDelete.id
         }, config).then(response => {
-            console.log('after deleting list', response);
+            //console.log('after deleting list', response);
         }).catch(er => {
-            console.log("error in deleting list", er);
+            //console.log("error in deleting list", er);
+            this.moveToLoginIfUnauthorized(er);
         })
     }
     // adding new taskName in the list 
@@ -263,12 +275,13 @@ export default class Dashboard extends Component {
                 taskId: this.state.selectedTask.id,
                 subtaskName: newSubTaskName
             }, config).then(response => {
-                console.log("after addding subtask ", response);
+                //console.log("after addding subtask ", response);
             }).catch(er => {
-                console.log('error in adding subtask', er);
+                //console.log('error in adding subtask', er);
+                this.moveToLoginIfUnauthorized(er);
             })
         } else if (toggled === true) {
-            console.log("data for toggling task", updatedTask);
+            //console.log("data for toggling task", updatedTask);
             Axios.post('http://localhost:3000/update/updateTask', {
                 listId: this.state.selectedList.id,
                 taskId: updatedTask.id,
@@ -279,10 +292,11 @@ export default class Dashboard extends Component {
                 taskDueDate: updatedTask.dueDate
             }, config)
                 .then(response => {
-                    console.log('after updating toggle status', response);
+                    //console.log('after updating toggle status', response);
                 })
                 .catch(er => {
-                    console.log('error in updating toggle status of task ', er);
+                    //console.log('error in updating toggle status of task ', er);
+                    this.moveToLoginIfUnauthorized(er);
                 });
         }
     }
@@ -290,7 +304,7 @@ export default class Dashboard extends Component {
 
     //updating deleted task in the state and making delete request to server
     updateDeletedTaskList = ({ updatedListAfterDeletion, taskToDelete }) => {
-        console.log('updateListAfterDeletion', updatedListAfterDeletion);
+        //console.log('updateListAfterDeletion', updatedListAfterDeletion);
         let updatedList = this.state.list.map(taskList => {
             if (taskList.id === updatedListAfterDeletion.id) {
                 return updatedListAfterDeletion;
@@ -303,15 +317,25 @@ export default class Dashboard extends Component {
                 list: updatedList
             }
         });
-        if (taskToDelete)
+
+        if (taskToDelete) {
+            if (this.state.selectedTask && taskToDelete.id === this.state.selectedTask.id) {
+                this.setState((prevState, props) => {
+                    return { selectedTask: null }
+                });
+            };
             Axios.post('http://localhost:3000/delete/deleteTask', {
                 listId: this.state.selectedList.id,
                 taskId: taskToDelete.id
             }, config).then(response => {
-                console.log('deleted task response ', response);
+                //console.log('deleted task response ', response);
+
             }).catch(er => {
-                console.log('error in deleting task', er);
+                //console.log('error in deleting task', er);
+                this.moveToLoginIfUnauthorized(er);
+
             })
+        }
     }
     //deleting subtask from the state and making delete request for that subtask to the server
     updateDeletedSubtask = ({ deleteUpdatedSubtasks, subtasktoDelete }) => {
@@ -320,18 +344,19 @@ export default class Dashboard extends Component {
             taskId: this.state.selectedTask.id,
             subtaskName: subtasktoDelete.name
         }, config).then(response => {
-            console.log('after deleting subtask', response);
+            //console.log('after deleting subtask', response);
             let updatedSelectedTask = this.state.selectedTask;
-            console.log('dash', updatedSelectedTask);
+            //console.log('dash', updatedSelectedTask);
             updatedSelectedTask.subTasks = deleteUpdatedSubtasks;
-            console.log(updatedSelectedTask.taskName);
+            //console.log(updatedSelectedTask.taskName);
             this.updateDeletedTaskList({ updatedListAfterDeletion: updatedSelectedTask });
         }).catch(er => {
-            console.log('error in deleting subtask', er);
+            //console.log('error in deleting subtask', er);
+            this.moveToLoginIfUnauthorized(er);
         })
     }
     saveSubtask = (oldSubtask, newSubtaskName) => {
-        console.log(oldSubtask, newSubtaskName);
+        //console.log("to network request ", oldSubtask, newSubtaskName);
         Axios.post('http://localhost:3000/update/updateSubtask', {
             listId: this.state.selectedList.id,
             taskId: this.state.selectedTask.id,
@@ -340,32 +365,115 @@ export default class Dashboard extends Component {
             subtaskCompletedStatus: oldSubtask.doneStatus
         }, config)
             .then(response => {
-                console.log('updated Subtask', response);
+                //console.log('updated Subtask', response);
             }).catch(er => {
-                console.log('error in updating subtask', er);
+                //console.log('error in updating subtask', er);
+                this.moveToLoginIfUnauthorized(er);
             })
     }
 
+    ListName = ({ oldSingleList, newListName }) => {
+        Axios.post('http://localhost:3000/update/updateList', {
+            listId: oldSingleList.id,
+            newListName: newListName
+        }, config).then(response => {
+            //console.log('response after editing listName', response);
+            let list = this.state.list;
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].id === oldSingleList.id) {
+                    list[i].listName = newListName;
+                    break;
+                }
+            }
+            this.setState((prevState, props) => {
+                return { list };
+            });
+
+        }).catch(er => {
+            //console.log('error in editing list Name', er);
+            this.moveToLoginIfUnauthorized(er);
+        });
+    }
+
+    editTaskName = ({ oldTask, newTaskName }) => {
+        // requirements -> for searching => listId, taskId 
+        //				   new data => taskName, taskCompletedStatus, taskImportantStatus, taskNotes, taskDueDate
+        Axios.post('http://localhost:3000/update/updateTask', {
+            listId: this.state.selectedList.id,
+            taskId: oldTask.id,
+            taskName: newTaskName,
+            taskCompletedStatus: oldTask.taskCompleted,
+            taskImportantStatus: oldTask.important,
+            taskNotes: oldTask.notes,
+            taskDueDate: oldTask.dueDate
+        }, config).then(response => {
+            //console.log('after editing taskName', response);
+            let selectedList = this.state.selectedList;
+            for (let i = 0; i < selectedList.taskList.length; i++) {
+                if (selectedList.taskList[i].id === oldTask.id) {
+                    selectedList.taskList[i].taskName = newTaskName;
+                    break;
+                }
+            }
+
+            this.setState((prevState, props) => {
+                return { selectedList };
+            });
+        }).catch(er => {
+            //console.log('error in editing taskName', er);
+            this.moveToLoginIfUnauthorized(er);
+        });
+    }
+    editSubtaskName = (subtask, newSubtaskName) => {
+        const shouldSendSubtask = { ...subtask };
+        let updatedSubtask = this.state.selectedTask.subTasks;
+        for (let i = 0; i < updatedSubtask.length; i++) {
+            if (updatedSubtask[i].name === subtask.name) {
+                //console.log('something happened in break', subtask, newSubtaskName);
+                updatedSubtask[i].name = newSubtaskName;
+                break;
+            }
+        }
+        let updatedTask = this.state.selectedTask;
+        updatedTask.subTasks = updatedSubtask;
+
+        this.saveSubtask(shouldSendSubtask, newSubtaskName);
+        this.setState((prevState, props) => {
+            return { selectedTask: updatedTask };
+        })
+    }
     render() {
         return <>
+
+            <div className="modal" style={{ translate: this.state.editMode ? '-50% 200%' : '-50% -100%' }}>
+                <div className="mid-modal">
+                    <input type="text" name="newName" placeholder="Enter newName" />
+                    <button>Cancel</button>
+                    <button>Save</button>
+                </div>
+            </div>
             <div className="dashboard">
                 <ListView
                     list={this.state.list}
                     onListSelect={this.selectList}
                     onDeleteList={this.deleteList}
-                    onAddNewList={this.addNewList} />
+                    onAddNewList={this.addNewList}
+                    editListName={this.editListName}
+                />
                 <TaskView
                     selectedList={this.state.selectedList}
                     updateTask={this.updateTask}
                     selectTask={this.selectTask}
                     onAddNewTask={this.addNewTask}
                     updateDeletedTaskList={this.updateDeletedTaskList}
+                    editTaskName={this.editTaskName}
                 />
                 <SubTaskView
                     selectedTask={this.state.selectedTask}
                     onClick={this.selectedSubTask}
                     updateTask={this.updateTask}
                     onSaveSubtask={this.saveSubtask}
+                    editSubtaskName={this.editSubtaskName}
                     updateDeletedSubtask={this.updateDeletedSubtask}
                 />
             </div>

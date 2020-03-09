@@ -6,9 +6,8 @@ import EditComponent from './EditComponent';
 
 export default class TaskView extends Component {
 
-    constructor(props) {
-        super(props);
-    }
+
+
 
     addTask = (e) => {
         e.preventDefault();
@@ -28,13 +27,24 @@ export default class TaskView extends Component {
 
     deleteTask = (taskToDelete) => {
         let updatedTaskList = this.props.selectedList.taskList.filter(task => task.id !== taskToDelete.id);
-        console.log('updatedTaskList TaskView', updatedTaskList);
+        //console.log('updatedTaskList TaskView', updatedTaskList);
         let updatedListAfterDeletion = this.props.selectedList;
         updatedListAfterDeletion.taskList = updatedTaskList;
         this.props.updateDeletedTaskList({ updatedListAfterDeletion, taskToDelete });
     }
+
+    editClickHandler = (task) => {
+        //console.log('editing task name ', task);
+        let editedTaskName = prompt('Enter task name', task.taskName);
+        if (editedTaskName === null) return;
+        editedTaskName = editedTaskName.trim();
+
+        if (editedTaskName !== task.taskName) {
+            this.props.editTaskName({ oldTask: task, newTaskName: editedTaskName });
+        }
+    }
     render() {
-        console.log("rendering taskView with props", this.props);
+        //console.log("rendering taskView with props", this.props);
         return <div className="taskView">
             {this.props.selectedList && this.props.selectedList.listName}
             {this.props.selectedList === null ?
@@ -51,7 +61,7 @@ export default class TaskView extends Component {
                                     checked={task.taskCompleted}
                                 />
                                 <EditComponent
-                                    onEditClickHandler={() => { console.log('click edit', task.taskName) }}
+                                    onEditClickHandler={() => { this.editClickHandler(task) }}
                                     onDeleteClickHandler={() => this.deleteTask(task)}
                                 />
                             </div>

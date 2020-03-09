@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import './ListView.css'
 import EditComponent from './EditComponent';
-import { config } from '../utility/requestConfig';
-import Axios from 'axios';
+
 export default class ListView extends Component {
-    constructor(props) {
-        super(props);
-    }
+
 
     createNewList = (e) => {
         e.preventDefault();
@@ -19,13 +16,18 @@ export default class ListView extends Component {
     }
 
     deleteClickHandler = (singleListName) => {
-        console.log('deleting ListName', singleListName)
+        // console.log('deleting ListName', singleListName)
         this.props.onDeleteList(singleListName);
     }
 
-    editClickHandler = (singleListName) => {
-        console.log('editing listName', singleListName);
-
+    editClickHandler = (singleList) => {
+        // console.log('editing listName', singleList);
+        let editedListName = prompt('Enter new List Name', singleList.listName)
+        if (editedListName === null) return;
+        editedListName = editedListName.trim();
+        if (editedListName !== singleList) {
+            this.props.editListName({ oldSingleList: singleList, newListName: editedListName });
+        }
     }
 
     render() {

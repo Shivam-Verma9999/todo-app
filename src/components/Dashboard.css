@@ -3,3 +3,13 @@
   background-color: bisque;
   height: 100vh;
 }
+.modal {
+  position: absolute;
+  display: flex;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: green;
+  left: 50%;
+  translate: -50% -100%;
+  transition-duration: 0.5s;
+}
