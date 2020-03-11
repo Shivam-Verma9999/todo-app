@@ -22,6 +22,11 @@ export default class App extends React.Component {
     }
     render() {
         return <>
+            <div className="float-opt">
+                <div className="opt">
+                    <button>LogOut</button>
+                </div>
+            </div>
             {(this.state.loggedIn) ? <Dashboard /> : <LoginEntryPoint login={this.doLogin} />}
         </>
     }

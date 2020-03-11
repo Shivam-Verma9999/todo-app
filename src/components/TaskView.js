@@ -58,17 +58,20 @@ export default class TaskView extends Component {
                         "New Task will appear here "
                         :
                         this.props.selectedList.taskList.map(task => {
-                            return <div className="content" key={task.id}>
-                                <ItemCheckHolder
-                                    name={task.taskName}
-                                    onClickHandler={() => this.props.selectTask(task)}
-                                    toggleDoneStatus={() => this.toggleDoneStatus(task)}
-                                    checked={task.taskCompleted}
-                                />
+                            return <div className="content flex" key={task.id}>
+                                <div className="flex-grow-1">
+                                    <ItemCheckHolder
+                                        name={task.taskName}
+                                        onClickHandler={() => this.props.selectTask(task)}
+                                        toggleDoneStatus={() => this.toggleDoneStatus(task)}
+                                        checked={task.taskCompleted}
+                                    />
+                                </div>
                                 <EditComponent
                                     onEditClickHandler={() => { this.editClickHandler(task) }}
                                     onDeleteClickHandler={() => this.deleteTask(task)}
                                 />
+
                             </div>
                         })
                     }

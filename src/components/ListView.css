@@ -1,6 +1,7 @@
 .listView {
   max-width: 350px;
   width: 350px;
+
   transition-duration: 1s;
   /* background-color: cadetblue; */
   max-height: 100vh;

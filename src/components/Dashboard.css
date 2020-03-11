@@ -1,6 +1,6 @@
 .dashboard {
   display: flex;
-  background-color: bisque;
+  /* background-color: bisque; */
   height: 100vh;
 }
 .modal {

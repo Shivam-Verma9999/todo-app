@@ -3,13 +3,40 @@
 }
 body {
   font-family: Roboto;
+  background-image: url("./images/background_gradient.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.flex {
+  display: flex;
+  justify-items: center;
+}
+.flex-grow-1 {
+  flex-grow: 1;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
-
+.float-opt {
+  position: absolute;
+  right: 0px;
+  /* background-color: red; */
+}
+.opt {
+  padding: 10px;
+  /* color: white; */
+}
+.opt button {
+  background-color: tomato;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 15px;
+  color: white;
+}
 .content {
   background-color: white;
   padding: 5px;

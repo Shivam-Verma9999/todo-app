@@ -78,13 +78,14 @@ export default class SubTaskView extends Component {
                     {this.props.selectedTask.subTasks.length === 0 ?
                         "Add steps to your task" :
                         this.props.selectedTask.subTasks.map(subTask => {
-                            return <div className="content" key={this.props.selectedTask.taskName + subTask.name}>
-                                <ItemCheckHolder
+                            return <div className="content flex" key={this.props.selectedTask.taskName + subTask.name}>
+                                <div className="flex-grow-1">  <ItemCheckHolder
                                     toggleDoneStatus={() => this.toggleDoneStatus(subTask)}
                                     onClickHandler={() => { console.log('clicking subtask') }}
                                     checked={subTask.doneStatus}
                                     name={subTask.name}
                                 />
+                                </div>
                                 <EditComponent
                                     onEditClickHandler={() => { this.editClickHandler(subTask) }}
                                     onDeleteClickHandler={() => this.onDeleteClickHandler(subTask)}
