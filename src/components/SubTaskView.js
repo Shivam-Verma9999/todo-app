@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
 import './SubTaskView.css';
-import ItemCheckHolder from './ItemCheckHolder';
-import EditComponent from './EditComponent';
 import ContentHolder from './ContentHolder';
 export default class SubTaskView extends Component {
 
@@ -43,6 +41,7 @@ export default class SubTaskView extends Component {
             return;
         }
         // TODO: can show anything meaninhg full 
+
         let newSubTask = {
             name: subTaskName,
             doneStatus: false

@@ -4,6 +4,7 @@ import './Dashboard.css';
 import ListView from './ListView';
 import TaskView from './TaskView';
 import SubTaskView from './SubTaskView';
+import logoImg from '../images/todo-icon.png';
 
 import Axios from 'axios';
 import { config, API_URL } from '../utility/Config';
@@ -451,6 +452,14 @@ export default class Dashboard extends Component {
     }
     render() {
         return <>
+            <div className="header">
+                <div className="logo-img">
+                    <img src={logoImg} height="100%" alt="TodoLogo" />
+                </div>
+                <div className="links">
+                    Logout
+                </div>
+            </div>
             <div className="dashboard">
                 <ListView
                     list={this.state.list}

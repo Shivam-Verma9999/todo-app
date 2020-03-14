@@ -13,6 +13,7 @@ export default class App extends React.Component {
 
     }
 
+    // for logging in and changing the state to logged in 
     doLogin = () => {
         console.log("calling from App.js");
         document.cookie = 'loggedIn=true';
@@ -20,13 +21,20 @@ export default class App extends React.Component {
             return { loggedIn: true }
         });
     }
+
+    // logging out
+    // clearing the loggedIn state cookie
+    logout = () => {
+        console.log('logging out');
+        document.cookie = 'loggedIn=false';
+        this.setState((prevState, props) => {
+            return { loggedIn: false };
+        })
+    }
+
     render() {
         return <>
-            <div className="float-opt">
-                <div className="opt">
-                    <button>LogOut</button>
-                </div>
-            </div>
+
             {(this.state.loggedIn) ? <Dashboard /> : <LoginEntryPoint login={this.doLogin} />}
         </>
     }

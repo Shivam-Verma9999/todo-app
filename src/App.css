@@ -1,9 +1,11 @@
+/* linear-gradient(to right, #23a19d 0%, #35c190 100%) */
+
 .App {
   text-align: center;
 }
 body {
   font-family: Roboto;
-  background-image: url("./images/background_gradient.jpg");
+  background-image: linear-gradient(to right, #23a19d 0%, #35c190 100%);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -21,27 +23,12 @@ body {
   height: 40vmin;
   pointer-events: none;
 }
-.float-opt {
-  position: absolute;
-  right: 0px;
-  /* background-color: red; */
-}
-.opt {
-  padding: 10px;
-  /* color: white; */
-}
-.opt button {
-  background-color: tomato;
-  border: none;
-  border-radius: 5px;
-  padding: 6px 15px;
-  color: white;
-}
+
 .content {
   background-color: white;
   padding: 5px;
   margin: 5px;
-  border-radius: 5px;
+  /* border-radius: 5px; */
   box-shadow: 0px 0px 2px 0px #c8cdd4;
   max-width: 90%;
   transition-duration: 0.2s;

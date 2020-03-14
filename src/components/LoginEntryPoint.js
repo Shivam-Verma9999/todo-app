@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './LoginEntryPoint.css';
-import InputFeild from './InputField';
+
 import { config, API_URL } from '../utility/Config';
+
+import logoImg from '../images/todo-icon.png';
 export default class LoginEntryPoint extends Component {
 
     onSubmit = (e) => {
@@ -39,17 +41,35 @@ export default class LoginEntryPoint extends Component {
             })
 
     }
+    //TODO:  create signup page
+    //TODO: show email varification message
+    //TODO: improve view of the app
     render() {
-        return <div className="loginContainer">
-            <div className="login">
-                <div className="formContainer">
-                    <form action="./" onSubmit={this.onSubmit}>
-                        <InputFeild label="Username" inputType="text" name="username" required={true} />
-                        <InputFeild label="Password" inputType="password" name="password" required={true} />
-                        <InputFeild inputType="submit" />
+        return <div className="container">
+            <div className="form">
+                <div className="welcome">
+                    <div className="logo-img">
+                        <img src={logoImg} height="100%" alt="person" />
+                    </div>
+                    <h1>Welcome,</h1>
+                    <p>Lets plan your day</p>
+                </div>
+                <div className="form-container">
+                    <form onSubmit={this.onSubmit}>
+                        <label for="username">email</label>
+                        <br />
+                        <input id="username" name="username" type="email" />
+                        <br />
+                        <label for="password">Password</label>
+                        <br />
+                        <input id="password" name="password" type="password" />
+                        <br />
+                        <input type="submit" value="Login" />
                     </form>
                 </div>
-
+                <div className="message">
+                    Dont have an account?, <a href="./signup.html">Signup</a>
+                </div>
             </div>
         </div>
     }
