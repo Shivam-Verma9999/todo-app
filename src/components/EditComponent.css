@@ -2,6 +2,7 @@
 }
 .delete-img,
 .edit-img {
-  height: 20px;
+  height: 17px;
   /* margin: 2px; */
+  padding: 2px;
 }

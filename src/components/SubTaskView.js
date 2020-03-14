@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './SubTaskView.css';
 import ItemCheckHolder from './ItemCheckHolder';
 import EditComponent from './EditComponent';
+import ContentHolder from './ContentHolder';
 export default class SubTaskView extends Component {
 
     toggleDoneStatus = (toggledSubtask) => {
@@ -78,19 +79,31 @@ export default class SubTaskView extends Component {
                     {this.props.selectedTask.subTasks.length === 0 ?
                         "Add steps to your task" :
                         this.props.selectedTask.subTasks.map(subTask => {
-                            return <div className="content flex" key={this.props.selectedTask.taskName + subTask.name}>
-                                <div className="flex-grow-1">  <ItemCheckHolder
-                                    toggleDoneStatus={() => this.toggleDoneStatus(subTask)}
-                                    onClickHandler={() => { console.log('clicking subtask') }}
-                                    checked={subTask.doneStatus}
-                                    name={subTask.name}
-                                />
-                                </div>
-                                <EditComponent
-                                    onEditClickHandler={() => { this.editClickHandler(subTask) }}
-                                    onDeleteClickHandler={() => this.onDeleteClickHandler(subTask)}
-                                />
-                            </div>
+                            // return <div className="content flex" key={this.props.selectedTask.taskName + subTask.name}>
+                            //     <div className="flex-grow-1">  <ItemCheckHolder
+                            //         toggleDoneStatus={() => this.toggleDoneStatus(subTask)}
+                            //         onClickHandler={() => { console.log('clicking subtask') }}
+                            //         checked={subTask.doneStatus}
+                            //         name={subTask.name}
+                            //     />
+                            //     </div>
+                            //     <EditComponent
+                            //         onEditClickHandler={() => { this.editClickHandler(subTask) }}
+                            //         onDeleteClickHandler={() => this.onDeleteClickHandler(subTask)}
+                            //     />
+                            // </div>
+
+
+                            return <ContentHolder
+                                key={this.props.selectedTask.id + subTask.name}
+                                showCheckBox={true}
+                                onToggleDoneStatus={() => this.toggleDoneStatus(subTask)}
+                                onClickHandler={() => console.log('clicking subtask')}
+                                doneStatus={subTask.doneStatus}
+                                textContent={subTask.name}
+                                EditComponentEditClickHandler={() => this.editClickHandler(subTask)}
+                                EditComponentDeleteClickHandler={() => this.onDeleteClickHandler(subTask)}
+                            />
                         })
                     }
                     <form onSubmit={this.addNewSubTask}>

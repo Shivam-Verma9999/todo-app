@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './TaskView.css';
 import ItemCheckHolder from './ItemCheckHolder';
 import EditComponent from './EditComponent';
+import ContentHolder from './ContentHolder';
 
 export default class TaskView extends Component {
 
@@ -58,21 +59,33 @@ export default class TaskView extends Component {
                         "New Task will appear here "
                         :
                         this.props.selectedList.taskList.map(task => {
-                            return <div className="content flex" key={task.id}>
-                                <div className="flex-grow-1">
-                                    <ItemCheckHolder
-                                        name={task.taskName}
-                                        onClickHandler={() => this.props.selectTask(task)}
-                                        toggleDoneStatus={() => this.toggleDoneStatus(task)}
-                                        checked={task.taskCompleted}
-                                    />
-                                </div>
-                                <EditComponent
-                                    onEditClickHandler={() => { this.editClickHandler(task) }}
-                                    onDeleteClickHandler={() => this.deleteTask(task)}
-                                />
+                            // return <div className="content flex" key={task.id}>
+                            //     <div className="flex-grow-1">
+                            //         <ItemCheckHolder
+                            //             name={task.taskName}
+                            //             onClickHandler={() => this.props.selectTask(task)}
+                            //             toggleDoneStatus={() => this.toggleDoneStatus(task)}
+                            //             checked={task.taskCompleted}
+                            //         />
+                            //     </div>
+                            //     <EditComponent
+                            //         onEditClickHandler={() => { this.editClickHandler(task) }}
+                            //         onDeleteClickHandler={() => this.deleteTask(task)}
+                            //     />
 
-                            </div>
+                            // </div>
+
+                            return <ContentHolder
+                                key={task.id}
+                                textContent={task.taskName}
+                                onToggleDoneStatus={() => this.toggleDoneStatus(task)}
+                                showCheckBox={true}
+                                onClickHandler={() => this.props.selectTask(task)}
+                                doneStatus={task.taskCompleted}
+                                EditComponentEditClickHandler={() => this.editClickHandler(task)}
+                                EditComponentDeleteClickHandler={() => this.deleteTask(task)}
+
+                            />
                         })
                     }
                     <form onSubmit={this.addTask}>

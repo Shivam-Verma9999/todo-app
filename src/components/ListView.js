@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './ListView.css'
 import EditComponent from './EditComponent';
+import ContentHolder from './ContentHolder';
 
 export default class ListView extends Component {
 
@@ -42,14 +43,22 @@ export default class ListView extends Component {
                             "New Categories will appear here"
                             :
                             this.props.list.map((singleList) => {
-                                return <div className="content flex" key={singleList.id} >
-                                    <div className="pointer flex-grow-1" onClick={() => { this.props.onListSelect(singleList) }}>{singleList.listName}</div>
-                                    <EditComponent
-                                        onEditClickHandler={() => this.editClickHandler(singleList)}
-                                        onDeleteClickHandler={() => this.deleteClickHandler(singleList)}
-                                    />
-                                    {/* <div className="liner"></div> */}
-                                </div>
+                                // return <div className="content flex" key={singleList.id} >
+                                //     <div className="pointer flex-grow-1" onClick={() => { this.props.onListSelect(singleList) }}>{singleList.listName}</div>
+                                //     <EditComponent
+                                //         onEditClickHandler={() => this.editClickHandler(singleList)}
+                                //         onDeleteClickHandler={() => this.deleteClickHandler(singleList)}
+                                //     />
+                                // </div>
+
+                                return <ContentHolder
+                                    key={singleList.id}
+                                    onListSelect={() => { this.props.onListSelect(singleList) }}
+                                    listName={singleList.listName}
+                                    EditComponentEditClickHandler={() => { this.editClickHandler(singleList) }}
+                                    EditComponentDeleteClickHandler={() => { this.deleteClickHandler(singleList) }}
+
+                                />
                             })
 
                     }
