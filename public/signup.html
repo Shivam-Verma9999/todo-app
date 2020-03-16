@@ -26,9 +26,9 @@
                     <br />
                     <input id="email" name="email" type="email" required />
                     <br />
-                    <label for="username">Usrname</label>
+                    <label for="name">Name</label>
                     <br />
-                    <input id="username" name="username" type="text" required />
+                    <input id="name" name="name" type="text" required />
                     <br />
                     <label for="password">Password</label>
                     <br />
@@ -51,7 +51,7 @@
         let formValidator = (event) => {
             event.preventDefault();
             let form = event.target;
-            let name = form.username.value && form.username.value.trim();
+            let name = form.name.value && form.name.value.trim();
             let email = form.email.value && form.email.value.trim();
             let password = form.password.value && form.password.value.trim();
             let confirmPassword = form.confirmPassword.value && form.confirmPassword.value.trim();
@@ -68,7 +68,32 @@
             } else if (password !== confirmPassword) {
                 alert('password do not match');
             } else {
+                let body = {
+                    username: email,
+                    password,
+                    name
+                }
+                let postBody = Object.keys(body)
+                    .map(key => {
+                        return encodeURIComponent(key) + '=' + encodeURIComponent(body[key])
+                    })
+                    .join('&');
+                console.log(postBody);
+                fetch('http://40.121.182.221:3000/auth/signUp', {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: postBody
+                }).then(res => {
+                    console.log(res);
+                    if (res.status === 400) {
+                        alert(res.statusText);
+                    } else if (res.status === 201) {
+                        alert('We have sent a verification link to your email.');
+                    }
 
+                }).catch(er => {
+                    console.log('error in signin', er);
+                })
             }
         }
 

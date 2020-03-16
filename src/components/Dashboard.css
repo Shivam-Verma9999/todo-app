@@ -1,7 +1,7 @@
 .dashboard {
   display: flex;
   /* background-color: bisque; */
-  height: 100vh;
+  height: calc(100vh - 50px);
 }
 .modal {
   position: absolute;
@@ -15,17 +15,55 @@
 }
 
 .header {
-  background-color: azure;
+  background-color: rgba(237, 253, 253, 1);
   display: flex;
   justify-content: space-between;
   justify-items: center;
 }
+.header button {
+  width: 100%;
+  position: relative;
+  /* top: 10px; */
+  background-color: rgb(247, 101, 101);
+  color: white;
+  /* letter-spacing: 2px; */
+  font-size: 0.8em;
+  border-radius: 5px;
+  box-shadow: #d5d3d3 10px 10px 10px;
+}
 .logo-img {
-  height: 40px;
+  height: 50px;
   margin-left: 20px;
 }
 .links {
   height: 100%;
   margin: auto;
   margin-right: 20px;
+}
+button {
+  border: none;
+  padding: 5px 10px;
+  background-color: #dbdbdb;
+  cursor: pointer;
+  /* color: white; */
+  /* border-radius: 5px; */
+}
+.dashboard form {
+  background-color: white;
+  display: inline-block;
+  max-width: 90%;
+  padding: 5px;
+  margin: 5px;
+  display: flex;
+}
+.dashboard form button {
+  background-color: #eee;
+}
+.dashboard form input {
+  border: none;
+  padding: 5px 10px;
+  flex-grow: 1;
+  min-width: 0px;
+  border-right: solid 2px #608bff;
+  background-color: #eee;
 }

@@ -21,11 +21,26 @@ export default class Dashboard extends Component {
         this.fetchProfile();
     }
 
+
     moveToLoginIfUnauthorized = (er) => {
-        if (er.response.status === 401) {
+        console.log(er);
+        if (er.response && er.response.status === 401) {
             document.cookie = 'loggedIn=false';
             window.location.reload();
         }
+    }
+    logout = () => {
+        Axios.get(`${API_URL}/signOut`)
+            .then(res => {
+                console.log('logging out response', res);
+                document.cookie = 'loggedIn=false';
+                window.location.reload();
+            })
+            .catch(er => {
+                console.log('error in logging out', er);
+                document.cookie = 'loggedIn=false';
+                window.location.reload();
+            })
     }
     fetchProfile = () => {
         Axios.get(`${API_URL}/profile`, config)
@@ -456,8 +471,9 @@ export default class Dashboard extends Component {
                 <div className="logo-img">
                     <img src={logoImg} height="100%" alt="TodoLogo" />
                 </div>
+                <span style={{ margin: 'auto', marginLeft: '0px', color: '#35c190', fontSize: '15px' }}>TODO</span>
                 <div className="links">
-                    Logout
+                    <button onClick={this.logout}>LogOut</button>
                 </div>
             </div>
             <div className="dashboard">

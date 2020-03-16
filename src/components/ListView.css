@@ -3,7 +3,13 @@
   width: 350px;
 
   transition-duration: 1s;
-  /* background-color: cadetblue; */
+  background-color: aliceblue;
   max-height: 100vh;
   overflow: auto;
+}
+.listView .content {
+  background: transparent;
+  border-color: transparent;
+  border-bottom-color: #dbdbdb;
+  box-shadow: none;
 }

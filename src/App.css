@@ -34,9 +34,8 @@ body {
   transition-duration: 0.2s;
   border: solid 1px transparent;
 }
-
 .content:hover {
-  border-color: tomato;
+  transform: scale(1.05, 1.05);
 }
 
 .pointer {
