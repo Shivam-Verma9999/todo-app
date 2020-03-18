@@ -2,6 +2,8 @@ import React from 'react';
 import ItemCheckHolder from './ItemCheckHolder';
 import EditComponent from './EditComponent';
 
+import starColored from '../images/star-colored3.png'
+import starFaded from '../images/star-faded.png';
 /// holding simple content
 /**
  *  showCheckBox = props.showCheckBox
@@ -16,6 +18,9 @@ import EditComponent from './EditComponent';
  * */
 
 export default function ContentHolder(props) {
+    if (props.isImportant) {
+        console.log('important', props.textContent)
+    }
     return <div className="content flex" key={props.key}>
         {/* show checkbox when it is passed in the props to show the checkbox */}
 
@@ -29,11 +34,14 @@ export default function ContentHolder(props) {
                 />
             </div>
             :
-            <div className="pointer flex-grow-1"
+            <div className=" flex-grow-1 clickable"
                 onClick={props.onListSelect}
             >
                 {props.listName}
             </div>
+        }
+        {props.isImportant !== undefined &&
+            <img className="clickable" onClick={props.toggleImp} src={props.isImportant ? starColored : starFaded} height="25px" alt="important" />
         }
         <EditComponent
             onEditClickHandler={props.EditComponentEditClickHandler}

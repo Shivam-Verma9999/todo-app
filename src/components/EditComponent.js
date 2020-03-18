@@ -9,7 +9,7 @@ export default function EditComponent(props) {
     return <div className="editcomp" >
         {/* <button onClick={props.onEditClickHandler} >Edit</button> */}
         {/* <button onClick={props.onDeleteClickHandler}>Delete</button> */}
-        <img className="edit-img" onClick={props.onEditClickHandler} src={editImg}></img>
-        <img className="delete-img" onClick={props.onDeleteClickHandler} src={deleteImg}></img>
+        <img className="edit-img clickable" onClick={props.onEditClickHandler} src={editImg}></img>
+        <img className="delete-img clickable" onClick={props.onDeleteClickHandler} src={deleteImg}></img>
     </div>
 }

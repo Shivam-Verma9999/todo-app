@@ -73,8 +73,8 @@ export default class SubTaskView extends Component {
         return <div style={{ flexGrow: (this.props.selectedTask) ? '1' : '0' }} className="subTaskView">
             {this.props.selectedTask != null &&
                 < ul >
-                    <h2>STEPS</h2>
-                    <h4>{this.props.selectedTask.taskName}</h4>
+                    {/* <h2>STEPS</h2> */}
+                    <h2>{this.props.selectedTask.taskName}</h2>
                     {this.props.selectedTask.subTasks.length === 0 ?
                         "Add steps to your task" :
                         this.props.selectedTask.subTasks.map(subTask => {

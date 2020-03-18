@@ -225,6 +225,7 @@ export default class Dashboard extends Component {
                     taskName: newTaskName,
                     id: response.data,
                     taskCompleted: false,
+                    important: false,
                     dueDate: null,
                     notes: "",
                     subTasks: []

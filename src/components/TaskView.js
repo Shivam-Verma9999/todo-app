@@ -46,6 +46,11 @@ export default class TaskView extends Component {
             this.props.editTaskName({ oldTask: task, newTaskName: editedTaskName });
         }
     }
+
+    toggleImp = (task) => {
+        task.important = !task.important;
+        this.props.editTaskName({ oldTask: task, newTaskName: task.taskName });
+    }
     render() {
         //console.log("rendering taskView with props", this.props);
         return <div className="taskView">
@@ -53,8 +58,8 @@ export default class TaskView extends Component {
                 "Please select list to View"
                 :
                 <ul>
-                    <h2>TASK</h2>
-                    <h3>{this.props.selectedList.listName}</h3>
+                    {/* <h2>TASK</h2> */}
+                    <h2>{this.props.selectedList.listName}</h2>
                     {this.props.selectedList.taskList.length === 0 ?
                         "New Task will appear here "
                         :
@@ -80,6 +85,8 @@ export default class TaskView extends Component {
                                 textContent={task.taskName}
                                 onToggleDoneStatus={() => this.toggleDoneStatus(task)}
                                 showCheckBox={true}
+                                isImportant={task.important}
+                                toggleImp={() => this.toggleImp(task)}
                                 onClickHandler={() => this.props.selectTask(task)}
                                 doneStatus={task.taskCompleted}
                                 EditComponentEditClickHandler={() => this.editClickHandler(task)}

@@ -37,11 +37,8 @@ body {
 .content:hover {
   transform: scale(1.05, 1.05);
 }
-
-.pointer {
+.clickable {
   cursor: pointer;
-  background-color: transparent;
-  transition-duration: 0.3s;
 }
 h2 {
   margin-left: -15px;

@@ -37,7 +37,7 @@ export default class ListView extends Component {
         return <div className="listView">
             <div>
                 <ul>
-                    <h2>CATEGORY</h2>
+                    <h2>TODO</h2>
                     {
                         (this.props.list.length === 0) ?
                             "New Categories will appear here"
@@ -64,7 +64,7 @@ export default class ListView extends Component {
                     }
                     <form onSubmit={this.createNewList}>
                         <input type='text' name="newListName" />
-                        <button type="submit">New Category</button>
+                        <button type="submit">New TODO</button>
                     </form>
                 </ul>
 
