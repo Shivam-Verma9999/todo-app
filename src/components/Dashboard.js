@@ -466,6 +466,11 @@ export default class Dashboard extends Component {
             return { selectedTask: updatedTask };
         })
     }
+
+    updateNotes = (newNote) => {
+        this.state.selectedTask.notes = newNote;
+        this.editTaskName({ oldTask: this.state.selectedTask, newTaskName: this.state.selectedTask.taskName })
+    }
     render() {
         return <>
             <div className="header">
@@ -500,6 +505,7 @@ export default class Dashboard extends Component {
                     onSaveSubtask={this.saveSubtask}
                     editSubtaskName={this.editSubtaskName}
                     updateDeletedSubtask={this.updateDeletedSubtask}
+                    onEditNotes={this.updateNotes}
                 />
             </div>
         </>

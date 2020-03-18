@@ -96,7 +96,7 @@ export default class TaskView extends Component {
                         })
                     }
                     <form onSubmit={this.addTask}>
-                        <input type='text' name="newTaskName" />
+                        <input autoComplete='off' type='text' name="newTaskName" />
                         <button type="submit" >New Task</button>
                     </form>
                 </ul>

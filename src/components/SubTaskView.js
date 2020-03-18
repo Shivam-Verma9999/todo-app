@@ -69,6 +69,14 @@ export default class SubTaskView extends Component {
             this.props.editSubtaskName(subtask, newSubtaskName)
         }
     }
+
+    editNotes = (event) => {
+        let updatedNotes = event.target.value.trim();
+        if (this.props.selectedTask.notes !== updatedNotes) {
+            console.log('Notes should update');
+            this.props.onEditNotes(updatedNotes);
+        }
+    }
     render() {
         return <div style={{ flexGrow: (this.props.selectedTask) ? '1' : '0' }} className="subTaskView">
             {this.props.selectedTask != null &&
@@ -105,8 +113,15 @@ export default class SubTaskView extends Component {
                             />
                         })
                     }
+                    <textarea
+                        onChange={(event) => this.editNotes(event)}
+                        placeholder="NOTES"
+                        defaultValue={this.props.selectedTask.notes}
+                        style={{ width: "90%", margin: "5px", padding: "5px", resize: "none" }}>
+
+                    </textarea>
                     <form onSubmit={this.addNewSubTask}>
-                        <input type='text' name="newSubTaskName" />
+                        <input autoComplete='off' type='text' name="newSubTaskName" />
                         <button type="submit">Add step</button>
                     </form>
                 </ul>

@@ -63,7 +63,7 @@ export default class ListView extends Component {
 
                     }
                     <form onSubmit={this.createNewList}>
-                        <input type='text' name="newListName" />
+                        <input autoComplete='off' type='text' name="newListName" />
                         <button type="submit">New TODO</button>
                     </form>
                 </ul>
