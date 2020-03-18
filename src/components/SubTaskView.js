@@ -4,6 +4,8 @@ import './SubTaskView.css';
 import ContentHolder from './ContentHolder';
 export default class SubTaskView extends Component {
 
+    noteUpdateTimeout = undefined;
+
     toggleDoneStatus = (toggledSubtask) => {
         toggledSubtask.doneStatus = !toggledSubtask.doneStatus;
         let updatedSubtasks = this.props.selectedTask.subTasks.map((subtask) => {
@@ -72,9 +74,25 @@ export default class SubTaskView extends Component {
 
     editNotes = (event) => {
         let updatedNotes = event.target.value.trim();
+        // update only if new content is different from previous one
         if (this.props.selectedTask.notes !== updatedNotes) {
             console.log('Notes should update');
-            this.props.onEditNotes(updatedNotes);
+
+
+            /**
+             * making a setTimout call because it is costly to make network request
+             * everytime note change by a character.
+             * so we wait for further updates if any then schedule network request for update in 400ms
+             * if new update occurs within the time specified for scheduled network request then we clear
+             * last scheduled network request and again make a new one to minimize number of network requests.
+             */
+
+
+            // if setTimeout already exists then clear the last one before making new one
+            if (this.noteUpdateTimeout) clearTimeout(this.noteUpdateTimeout);
+            this.noteUpdateTimeout = setTimeout(() => {
+                this.props.onEditNotes(updatedNotes);
+            }, 350);
         }
     }
     render() {
@@ -113,11 +131,16 @@ export default class SubTaskView extends Component {
                             />
                         })
                     }
+
                     <textarea
+                        key={this.props.selectedTask.id}
                         onChange={(event) => this.editNotes(event)}
                         placeholder="NOTES"
+                        spellCheck="false"
+                        data-gramm_editor="false"
                         defaultValue={this.props.selectedTask.notes}
-                        style={{ width: "90%", margin: "5px", padding: "5px", resize: "none" }}>
+                        style={{ width: "90%", margin: "5px", padding: "5px", resize: "none" }}
+                    >
 
                     </textarea>
                     <form onSubmit={this.addNewSubTask}>

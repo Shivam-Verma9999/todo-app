@@ -87,12 +87,13 @@ export default class TaskView extends Component {
                                 showCheckBox={true}
                                 isImportant={task.important}
                                 toggleImp={() => this.toggleImp(task)}
+                                dueDate={task.dueDate}
                                 onClickHandler={() => this.props.selectTask(task)}
                                 doneStatus={task.taskCompleted}
                                 EditComponentEditClickHandler={() => this.editClickHandler(task)}
                                 EditComponentDeleteClickHandler={() => this.deleteTask(task)}
-
                             />
+
                         })
                     }
                     <form onSubmit={this.addTask}>
