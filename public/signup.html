@@ -67,6 +67,8 @@
                 alert('confirm above password');
             } else if (password !== confirmPassword) {
                 alert('password do not match');
+            } else if (password.length < 6) {
+                alert('Please choose a secure password of minimum 6 Characters');
             } else {
                 let body = {
                     username: email,

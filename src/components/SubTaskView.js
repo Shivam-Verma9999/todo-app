@@ -150,6 +150,7 @@ export default class SubTaskView extends Component {
                     <AddForm onSubmit={this.addNewSubTask} />
 
                     <div className="datePicker">
+                        <div style={{ marginTop: '5px', fontWeight: '100', color: "gray" }}>Due Date</div>
                         <div>
                             <img style={{ marginTop: '5px' }} src={clockIcon} />
                         </div>
