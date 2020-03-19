@@ -1,6 +1,14 @@
 .subTaskView {
   flex-grow: 0;
-  transition-duration: 1s;
+  transition-duration: 0.3s;
   background-color: aliceblue;
   overflow: auto;
+}
+.datePicker {
+  margin: 5px;
+  padding: 5px;
+  display: flex;
+  width: 90%;
+  flex-wrap: wrap;
+  justify-content: stretch;
 }

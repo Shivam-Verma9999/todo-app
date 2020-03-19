@@ -22,13 +22,23 @@ export default function ContentHolder(props) {
     function getDueDateView(UTCString) {
         let dueDate = new Date(UTCString);
         let currentDate = new Date();
-        let isExpired = currentDate.toLocaleDateString() > dueDate.toLocaleDateString();
-        console.log(currentDate.toLocaleDateString(), dueDate.toLocaleDateString(), isExpired);
+
+        // ignoring the time 
+        dueDate.setHours(0, 0, 0, 0);
+        currentDate.setHours(0, 0, 0, 0);
+
+        let isExpired = currentDate.getTime() > dueDate.getTime();
+
+        // console.log(currentDate.toLocaleDateString(), dueDate.toLocaleDateString(), isExpired);
         let viewContent = dueDate.toDateString();
+        if (currentDate.getTime() === dueDate.getTime()) {
+            viewContent = 'TODAY';
+        } else if (currentDate.setDate(currentDate.getDate() + 1) === dueDate.getTime()) {
+            viewContent = 'TOMMORROW';
+        }
         return <span className={isExpired ? 'expired' : ''}>{viewContent}</span>
     }
-    if (props.dueDate)
-        console.log(getDueDateView(props.dueDate))
+
 
     return <div className="content" key={props.key}>
         {/* show checkbox when it is passed in the props to show the checkbox */}
@@ -58,6 +68,7 @@ export default function ContentHolder(props) {
                 onDeleteClickHandler={props.EditComponentDeleteClickHandler}
             />
         </div>
+
         <div className="date clickable" onClick={props.onClickHandler}>
             {
                 props.dueDate && props.dueDate.length && getDueDateView(props.dueDate)

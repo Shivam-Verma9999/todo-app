@@ -14,6 +14,8 @@ export default class Dashboard extends Component {
         super(props);
         this.state = {
             list: [],
+            name: '',
+            email: '',
             selectedList: null,
             selectedTask: null,
             selectedSubTask: null
@@ -44,10 +46,10 @@ export default class Dashboard extends Component {
     }
     fetchProfile = () => {
         Axios.get(`${API_URL}/profile`, config)
-            .then(data => {
+            .then(response => {
                 // console.log('profile load', data.data);
                 let count = 0;
-                let fullList = data.data.lists.map(list => {
+                let fullList = response.data.lists.map(list => {
                     let listObj = {
                         listName: list.name,
                         id: list.id,
@@ -69,7 +71,7 @@ export default class Dashboard extends Component {
                 });
                 // console.log(fullList);
                 this.setState((prevState, props) => {
-                    return { list: fullList };
+                    return { list: fullList, name: response.data.name, email: response.data.username };
                 });
                 this.getSelectedList(this.state.selectedList);
             }).catch(er => {
@@ -471,6 +473,10 @@ export default class Dashboard extends Component {
         this.state.selectedTask.notes = newNote;
         this.editTaskName({ oldTask: this.state.selectedTask, newTaskName: this.state.selectedTask.taskName })
     }
+    updateDueDate = (newDateUTCString) => {
+        this.state.selectedTask.dueDate = newDateUTCString;
+        this.editTaskName({ oldTask: this.state.selectedTask, newTaskName: this.state.selectedTask.taskName });
+    }
     render() {
         return <>
             <div className="header">
@@ -479,7 +485,11 @@ export default class Dashboard extends Component {
                 </div>
                 <span style={{ margin: 'auto', marginLeft: '0px', color: '#35c190', fontSize: '15px' }}>TODO</span>
                 <div className="links">
-                    <button onClick={this.logout}>LogOut</button>
+                    <ul>
+                        <li>{this.state.email}</li>
+                        <li><button onClick={this.logout}>LogOut</button></li>
+                        {/* <li>{this.state.name}</li> */}
+                    </ul>
                 </div>
             </div>
             <div className="dashboard">
@@ -506,6 +516,7 @@ export default class Dashboard extends Component {
                     editSubtaskName={this.editSubtaskName}
                     updateDeletedSubtask={this.updateDeletedSubtask}
                     onEditNotes={this.updateNotes}
+                    onUpdateDueDate={this.updateDueDate}
                 />
             </div>
         </>

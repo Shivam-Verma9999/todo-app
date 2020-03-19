@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
+import DatePicker from 'react-datepicker';
 
-import './SubTaskView.css';
+import "react-datepicker/dist/react-datepicker.css";
+
 import ContentHolder from './ContentHolder';
+import './SubTaskView.css';
+
+import clockIcon from '../images/icon-clock2.png';
+import calendarIcon from '../images/icon-calendar.png';
+import AddForm from './AddForm';
+
 export default class SubTaskView extends Component {
 
+
+    //for storing setTimeout id
     noteUpdateTimeout = undefined;
 
     toggleDoneStatus = (toggledSubtask) => {
@@ -24,35 +34,31 @@ export default class SubTaskView extends Component {
         this.props.updateTask({ updatedTask, newSubTaskName: toggledSubtask.name, toggled: true });
     }
 
-    addNewSubTask = (e) => {
-        e.preventDefault();
-        let subTaskName = e.target.newSubTaskName.value.trim();
-        e.target.newSubTaskName.value = '';
-        if (subTaskName.length === 0) return;
+    addNewSubTask = (newSubTaskName) => {
 
         let alreadyExists = false;
         let listOfSubtasks = this.props.selectedTask.subTasks;
         for (let i = 0; i < listOfSubtasks.length; i++) {
-            if (listOfSubtasks[i].name === subTaskName) {
+            if (listOfSubtasks[i].name === newSubTaskName) {
                 alreadyExists = true;
                 break;
             }
         }
         if (alreadyExists) {
-            alert(`"${subTaskName}" already exists.`);
+            alert(`"${newSubTaskName}" already exists.`);
             return;
         }
         // TODO: can show anything meaninhg full 
 
         let newSubTask = {
-            name: subTaskName,
+            name: newSubTaskName,
             doneStatus: false
         }
         let updatedSubtasks = this.props.selectedTask.subTasks;
         updatedSubtasks.push(newSubTask);
         let updatedTask = this.props.selectedTask;
         updatedTask.subTasks = updatedSubtasks;
-        this.props.updateTask({ updatedTask, newSubTaskName: subTaskName, toggled: false });
+        this.props.updateTask({ updatedTask, newSubTaskName: newSubTaskName, toggled: false });
 
     }
 
@@ -92,8 +98,16 @@ export default class SubTaskView extends Component {
             if (this.noteUpdateTimeout) clearTimeout(this.noteUpdateTimeout);
             this.noteUpdateTimeout = setTimeout(() => {
                 this.props.onEditNotes(updatedNotes);
-            }, 350);
+            }, 400);
         }
+    }
+    updateDueDate = (newDateObj) => {
+        console.log(newDateObj);
+        console.log(newDateObj.toUTCString());
+        this.props.onUpdateDueDate(newDateObj.toUTCString());
+    }
+    unsetDueDate = () => {
+        this.props.onUpdateDueDate("");
     }
     render() {
         return <div style={{ flexGrow: (this.props.selectedTask) ? '1' : '0' }} className="subTaskView">
@@ -132,21 +146,36 @@ export default class SubTaskView extends Component {
                         })
                     }
 
+                    {/* <div className="divider"></div> */}
+                    <AddForm onSubmit={this.addNewSubTask} />
+
+                    <div className="datePicker">
+                        <div>
+                            <img style={{ marginTop: '5px' }} src={clockIcon} />
+                        </div>
+                        <div style={{ margin: 'auto', marginLeft: '0px' }}>
+                            <DatePicker
+                                selected={this.props.selectedTask.dueDate && new Date(this.props.selectedTask.dueDate)}
+                                dateFormat="MMMM d, yyyy"
+                                onChange={(newDateObj) => this.updateDueDate(newDateObj)}
+                            />
+                        </div>
+                        {/* {!this.props.selectedTask.dueDate && "Have deadline? set dueDate"} */}
+
+                        {this.props.selectedTask.dueDate && <button onClick={this.unsetDueDate}>Unset</button>}
+                    </div>
+
                     <textarea
                         key={this.props.selectedTask.id}
-                        onChange={(event) => this.editNotes(event)}
+                        onChange={this.updateDueDate}
                         placeholder="NOTES"
                         spellCheck="false"
                         data-gramm_editor="false"
                         defaultValue={this.props.selectedTask.notes}
                         style={{ width: "90%", margin: "5px", padding: "5px", resize: "none" }}
                     >
-
                     </textarea>
-                    <form onSubmit={this.addNewSubTask}>
-                        <input autoComplete='off' type='text' name="newSubTaskName" />
-                        <button type="submit">Add step</button>
-                    </form>
+
                 </ul>
             }
 

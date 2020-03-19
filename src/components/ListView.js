@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
 import './ListView.css'
-import EditComponent from './EditComponent';
+import AddForm from './AddForm';
 import ContentHolder from './ContentHolder';
 
 export default class ListView extends Component {
 
-    createNewList = (e) => {
-        e.preventDefault();
-        let newListName = e.target.newListName.value.trim();
-        if (newListName) {
-            this.props.onAddNewList(newListName);
-        }
-        e.target.newListName.value = '';
-
+    createNewList = (newListName) => {
+        this.props.onAddNewList(newListName);
     }
 
     deleteClickHandler = (singleListName) => {
@@ -62,10 +56,9 @@ export default class ListView extends Component {
                             })
 
                     }
-                    <form onSubmit={this.createNewList}>
-                        <input autoComplete='off' type='text' name="newListName" />
-                        <button type="submit">New TODO</button>
-                    </form>
+                    <AddForm
+                        onSubmit={this.createNewList}
+                    />
                 </ul>
 
             </div>

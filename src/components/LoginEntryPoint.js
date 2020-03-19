@@ -56,7 +56,7 @@ export default class LoginEntryPoint extends Component {
                 </div>
                 <div className="form-container">
                     <form onSubmit={this.onSubmit}>
-                        <label for="username">email</label>
+                        <label for="username">Email</label>
                         <br />
                         <input id="username" name="username" type="email" />
                         <br />

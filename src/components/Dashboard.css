@@ -20,6 +20,9 @@
   justify-content: space-between;
   justify-items: center;
 }
+.header ul {
+  margin: 0px;
+}
 .header button {
   width: 100%;
   position: relative;
@@ -40,6 +43,10 @@
   margin: auto;
   margin-right: 20px;
 }
+.links li {
+  display: inline-block;
+  margin: 5px;
+}
 button {
   border: none;
   padding: 5px 10px;
@@ -57,12 +64,15 @@ button {
 }
 .dashboard form button {
   background-color: #eee;
+  border-radius: 0px 5px 5px 0px;
 }
+
 .dashboard form input {
   border: none;
   padding: 5px 10px;
   flex-grow: 1;
   min-width: 0px;
   border-right: solid 2px #608bff;
+  border-radius: 5px 0px 0px 5px;
   background-color: #eee;
 }

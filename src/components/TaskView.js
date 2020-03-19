@@ -4,19 +4,15 @@ import './TaskView.css';
 import ItemCheckHolder from './ItemCheckHolder';
 import EditComponent from './EditComponent';
 import ContentHolder from './ContentHolder';
+import AddForm from './AddForm';
 
 export default class TaskView extends Component {
 
 
 
 
-    addTask = (e) => {
-        e.preventDefault();
-        let newTask = e.target.newTaskName.value.trim();
-        if (newTask.length !== 0) {
-            this.props.onAddNewTask(newTask);
-        }
-        e.target.newTaskName.value = '';
+    addTask = (newTaskName) => {
+        this.props.onAddNewTask(newTaskName);
     }
 
 
@@ -96,10 +92,7 @@ export default class TaskView extends Component {
 
                         })
                     }
-                    <form onSubmit={this.addTask}>
-                        <input autoComplete='off' type='text' name="newTaskName" />
-                        <button type="submit" >New Task</button>
-                    </form>
+                    <AddForm onSubmit={this.addTask} />
                 </ul>
             }
 
