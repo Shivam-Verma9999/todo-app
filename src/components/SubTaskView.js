@@ -7,7 +7,6 @@ import ContentHolder from './ContentHolder';
 import './SubTaskView.css';
 
 import clockIcon from '../images/icon-clock2.png';
-import calendarIcon from '../images/icon-calendar.png';
 import AddForm from './AddForm';
 
 export default class SubTaskView extends Component {
@@ -168,7 +167,7 @@ export default class SubTaskView extends Component {
 
                     <textarea
                         key={this.props.selectedTask.id}
-                        onChange={this.updateDueDate}
+                        onChange={this.editNotes}
                         placeholder="NOTES"
                         spellCheck="false"
                         data-gramm_editor="false"

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
 import './TaskView.css';
-import ItemCheckHolder from './ItemCheckHolder';
-import EditComponent from './EditComponent';
 import ContentHolder from './ContentHolder';
 import AddForm from './AddForm';
 
@@ -51,7 +49,7 @@ export default class TaskView extends Component {
         //console.log("rendering taskView with props", this.props);
         return <div className="taskView">
             {this.props.selectedList === null ?
-                "Please select list to View"
+                "Please select a TODO to View"
                 :
                 <ul>
                     {/* <h2>TASK</h2> */}

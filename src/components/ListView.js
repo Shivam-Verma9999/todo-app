@@ -34,7 +34,7 @@ export default class ListView extends Component {
                     <h2>TODO</h2>
                     {
                         (this.props.list.length === 0) ?
-                            "New Categories will appear here"
+                            "New TODOs will appear here"
                             :
                             this.props.list.map((singleList) => {
                                 // return <div className="content flex" key={singleList.id} >

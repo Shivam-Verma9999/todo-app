@@ -2,5 +2,5 @@
   flex-grow: 1;
   transition-duration: 1s;
   overflow: auto;
-  /* background-color: rgb(95, 107, 160); */
+  background-image: url("../images/tvback.png");
 }
