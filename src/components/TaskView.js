@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-
+import PopUp from './PopUp';
 import './TaskView.css';
 import ContentHolder from './ContentHolder';
 import AddForm from './AddForm';
 
 export default class TaskView extends Component {
 
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            shouldShowPopup: false,
+            listToBeEdited: undefined,
+            value: ""
+        }
+    }
 
 
     addTask = (newTaskName) => {
@@ -30,9 +37,9 @@ export default class TaskView extends Component {
         this.props.updateDeletedTaskList({ updatedListAfterDeletion, taskToDelete });
     }
 
-    editClickHandler = (task) => {
+    editClickHandler = ({ task, newName }) => {
         //console.log('editing task name ', task);
-        let editedTaskName = prompt('Enter task name', task.taskName);
+        let editedTaskName = newName;
         if (editedTaskName === null) return;
         editedTaskName = editedTaskName.trim();
 
@@ -45,9 +52,28 @@ export default class TaskView extends Component {
         task.important = !task.important;
         this.props.editTaskName({ oldTask: task, newTaskName: task.taskName });
     }
+
+    showPopup = (task) => {
+        this.setState({ shouldShowPopup: true, taskToBeEdited: task, value: task.taskName });
+    }
+    removePopup = () => {
+        this.setState({ shouldShowPopup: false, taskToBeEdited: undefined, value: "" });
+    }
+
+
     render() {
         //console.log("rendering taskView with props", this.props);
         return <div className="taskView">
+            {
+                this.state.shouldShowPopup
+                &&
+                <PopUp
+                    initialContent={this.state.value}
+                    name='task'
+                    callBack={(newName) => { this.editClickHandler({ task: this.state.taskToBeEdited, newName }) }}
+                    removePopup={this.removePopup}
+                />
+            }
             {this.props.selectedList === null ?
                 "Please select a TODO to View"
                 :
@@ -84,7 +110,7 @@ export default class TaskView extends Component {
                                 dueDate={task.dueDate}
                                 onClickHandler={() => this.props.selectTask(task)}
                                 doneStatus={task.taskCompleted}
-                                EditComponentEditClickHandler={() => this.editClickHandler(task)}
+                                EditComponentEditClickHandler={() => this.showPopup(task)}
                                 EditComponentDeleteClickHandler={() => this.deleteTask(task)}
                             />
 

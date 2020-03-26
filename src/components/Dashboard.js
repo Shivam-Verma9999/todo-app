@@ -8,6 +8,7 @@ import logoImg from '../images/todo-icon.png';
 
 import Axios from 'axios';
 import { config, API_URL } from '../utility/Config';
+import PopUp from './PopUp';
 
 export default class Dashboard extends Component {
     constructor(props) {
@@ -492,6 +493,7 @@ export default class Dashboard extends Component {
                     </ul>
                 </div>
             </div>
+
             <div className="dashboard">
                 <ListView
                     list={this.state.list}

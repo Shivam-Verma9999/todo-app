@@ -2,8 +2,18 @@ import React, { Component } from 'react';
 import './ListView.css'
 import AddForm from './AddForm';
 import ContentHolder from './ContentHolder';
+import PopUp from './PopUp';
 
 export default class ListView extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            shouldShowPopup: false,
+            listToBeEdited: undefined,
+            value: ""
+        }
+    }
 
     createNewList = (newListName) => {
         this.props.onAddNewList(newListName);
@@ -15,9 +25,16 @@ export default class ListView extends Component {
             this.props.onDeleteList(singleListName);
     }
 
-    editClickHandler = (singleList) => {
-        // console.log('editing listName', singleList);
-        let editedListName = prompt('Enter new List Name', singleList.listName)
+    showPopup = (singleList) => {
+        this.setState({ shouldShowPopup: true, listToBeEdited: singleList, value: singleList.listName });
+    }
+    removePopup = () => {
+        this.setState({ shouldShowPopup: false, listToBeEdited: undefined, value: "" });
+    }
+
+    editClickHandler = ({ singleList, newName }) => {
+        console.log('editing listName', singleList);
+        let editedListName = newName;
         if (editedListName === null) return;
         editedListName = editedListName.trim();
         if (editedListName !== singleList) {
@@ -29,6 +46,16 @@ export default class ListView extends Component {
 
 
         return <div className="listView">
+            {
+                this.state.shouldShowPopup
+                &&
+                <PopUp
+                    initialContent={this.state.value}
+                    name='ToDo'
+                    callBack={(newName) => { this.editClickHandler({ singleList: this.state.listToBeEdited, newName }) }}
+                    removePopup={this.removePopup}
+                />
+            }
             <div>
                 <ul>
                     <h2>TODO</h2>
@@ -49,7 +76,8 @@ export default class ListView extends Component {
                                     key={singleList.id}
                                     onListSelect={() => { this.props.onListSelect(singleList) }}
                                     listName={singleList.listName}
-                                    EditComponentEditClickHandler={() => { this.editClickHandler(singleList) }}
+                                    // EditComponentEditClickHandler={() => { this.editClickHandler(singleList) }}
+                                    EditComponentEditClickHandler={() => { this.showPopup(singleList) }}
                                     EditComponentDeleteClickHandler={() => { this.deleteClickHandler(singleList) }}
 
                                 />

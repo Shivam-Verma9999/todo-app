@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
+import PopUp from './PopUp';
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -11,6 +12,14 @@ import AddForm from './AddForm';
 
 export default class SubTaskView extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            shouldShowPopup: false,
+            listToBeEdited: undefined,
+            value: ""
+        }
+    }
 
     //for storing setTimeout id
     noteUpdateTimeout = undefined;
@@ -68,12 +77,12 @@ export default class SubTaskView extends Component {
         this.props.updateDeletedSubtask({ deleteUpdatedSubtasks, subtasktoDelete: deletedSubtask });
     }
 
-    editClickHandler = (subtask) => {
-        let newSubtaskName = prompt('Enter new Subtask Name', subtask.name);
+    editClickHandler = ({ subTask, newName }) => {
+        let newSubtaskName = newName;
         if (newSubtaskName === null) return;
         newSubtaskName = newSubtaskName.trim();
-        if (newSubtaskName !== subtask.name) {
-            this.props.editSubtaskName(subtask, newSubtaskName)
+        if (newSubtaskName !== subTask.name) {
+            this.props.editSubtaskName(subTask, newSubtaskName)
         }
     }
 
@@ -108,8 +117,26 @@ export default class SubTaskView extends Component {
     unsetDueDate = () => {
         this.props.onUpdateDueDate("");
     }
+
+    showPopup = (subTask) => {
+        this.setState({ shouldShowPopup: true, subTaskToBeEdited: subTask, value: subTask.name });
+    }
+    removePopup = () => {
+        this.setState({ shouldShowPopup: false, subTaskToBeEdited: undefined, value: "" });
+    }
+
     render() {
         return <div style={{ flexGrow: (this.props.selectedTask) ? '1' : '0' }} className="subTaskView">
+            {
+                this.state.shouldShowPopup
+                &&
+                <PopUp
+                    initialContent={this.state.value}
+                    name='Step'
+                    callBack={(newName) => { this.editClickHandler({ subTask: this.state.subTaskToBeEdited, newName }) }}
+                    removePopup={this.removePopup}
+                />
+            }
             {this.props.selectedTask != null &&
                 < ul >
                     {/* <h2>STEPS</h2> */}
@@ -139,7 +166,7 @@ export default class SubTaskView extends Component {
                                 onClickHandler={() => console.log('clicking subtask')}
                                 doneStatus={subTask.doneStatus}
                                 textContent={subTask.name}
-                                EditComponentEditClickHandler={() => this.editClickHandler(subTask)}
+                                EditComponentEditClickHandler={() => this.showPopup(subTask)}
                                 EditComponentDeleteClickHandler={() => this.onDeleteClickHandler(subTask)}
                             />
                         })
