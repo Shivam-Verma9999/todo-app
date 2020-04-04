@@ -81,7 +81,7 @@
                     })
                     .join('&');
                 console.log(postBody);
-                fetch('http://40.121.182.221:3000/auth/signUp', {
+                fetch('http://40.121.182.221:3000/api/auth/signUp', {
                     method: 'post',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: postBody

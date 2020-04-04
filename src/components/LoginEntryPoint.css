@@ -63,3 +63,18 @@
 .message {
   font-size: 12px;
 }
+
+.loginError {
+  text-align: center;
+  background-color: rgb(247, 205, 205);
+  color: #f44444;
+  transition-duration: 0.2s;
+  max-height: 0px;
+  border-radius: 5px;
+  padding: 0px;
+}
+
+.loginErrorActive {
+  padding: 5px;
+  max-height: 100px;
+}

@@ -9,6 +9,14 @@ export default class LoginEntryPoint extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
+
+        let errorDiv = document.querySelector('.loginError');
+
+        if (errorDiv.classList.contains('loginErrorActive')) {
+            errorDiv.classList.remove('loginErrorActive');
+        }
+        errorDiv.innerHTML = "";
+        // alert('dfsd');
         console.log(`Calling onSubmit in login form`);
         // console.log(e.target);
         let username = e.target.username.value.trim();
@@ -29,7 +37,10 @@ export default class LoginEntryPoint extends Component {
             .then((result) => {
                 console.log('then', result);
                 if (result.statusText !== 'Login Successful') {
-                    alert('wrong username or password');
+                    // alert('wrong username or password');
+                    errorDiv.classList.add('loginErrorActive');
+                    errorDiv.innerHTML = 'Wrong username or password';
+
                 } else {
                     this.props.login();
                 }
@@ -41,9 +52,8 @@ export default class LoginEntryPoint extends Component {
             })
 
     }
-    //TODO:  create signup page
+
     //TODO: show email varification message
-    //TODO: improve view of the app
     render() {
         return <div className="container">
             <div className="form">
@@ -53,6 +63,8 @@ export default class LoginEntryPoint extends Component {
                     </div>
                     <h1>Welcome,</h1>
                     <p>Lets plan your day</p>
+                </div>
+                <div className="loginError">
                 </div>
                 <div className="form-container">
                     <form onSubmit={this.onSubmit}>
