@@ -484,7 +484,7 @@ export default class Dashboard extends Component {
                 <div className="logo-img">
                     <img src={logoImg} height="100%" alt="TodoLogo" />
                 </div>
-                <span style={{ margin: 'auto', marginLeft: '0px', color: '#35c190', fontSize: '15px' }}>TODO</span>
+                <span style={{ margin: 'auto', marginLeft: '0px', color: '#35c190', fontSize: '15px' }}>Diary</span>
                 <div className="links">
                     <ul>
                         <li>{this.state.email}</li>

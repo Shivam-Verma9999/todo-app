@@ -51,17 +51,17 @@ export default class ListView extends Component {
                 &&
                 <PopUp
                     initialContent={this.state.value}
-                    name='ToDo'
+                    name='Diary'
                     callBack={(newName) => { this.editClickHandler({ singleList: this.state.listToBeEdited, newName }) }}
                     removePopup={this.removePopup}
                 />
             }
             <div>
                 <ul>
-                    <h2>TODO</h2>
+                    <h2>Diary</h2>
                     {
                         (this.props.list.length === 0) ?
-                            "New TODOs will appear here"
+                            "New Diary will appear here"
                             :
                             this.props.list.map((singleList) => {
                                 // return <div className="content flex" key={singleList.id} >
