@@ -8,6 +8,6 @@ const config = {
 // const API_URL = 'http://localhost:3000/api';
 
 //hosted api link
-const API_URL = 'http://40.121.182.221:3000/api';
+const API_URL = 'https://todo-app-server-8zs8.onrender.com/api';
 
 export { config, API_URL };
