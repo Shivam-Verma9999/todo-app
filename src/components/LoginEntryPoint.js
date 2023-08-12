@@ -36,7 +36,7 @@ export default class LoginEntryPoint extends Component {
         axios.post(url, body, config)
             .then((result) => {
                 console.log('then', result);
-                if (result.statusText !== 'Login Successful') {
+                if (result.status !== 200) {
                     // alert('wrong username or password');
                     errorDiv.classList.add('loginErrorActive');
                     errorDiv.innerHTML = 'Wrong username or password';
