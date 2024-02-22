@@ -79,8 +79,8 @@ input[type="submit"] {
   transition-duration: 0.2s;
   max-height: 0px;
   border-radius: 5px;
-  padding: 5px 0px;
   max-width: 300px;
+  transition-duration: 1s;
 }
 
 .signUpErrorActive {
